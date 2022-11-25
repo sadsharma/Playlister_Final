@@ -1,6 +1,9 @@
 import React, { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 
+import MUIEditSongModal from './MUIEditSongModal'
+import MUIRemoveSongModal from './MUIRemoveSongModal'
+
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [ draggedTo, setDraggedTo ] = useState(0);
@@ -34,6 +37,7 @@ function SongCard(props) {
         store.addMoveSongTransaction(sourceIndex, targetIndex);
     }
     function handleRemoveSong(event) {
+        console.log("clicked");
         store.showRemoveSongModal(index, song);
     }
     function handleClick(event) {
@@ -44,6 +48,13 @@ function SongCard(props) {
     }
 
     let cardClass = "list-card unselected-list-card";
+    let modalJSX = "";
+    if (store.isEditSongModalOpen()) {
+        modalJSX = <MUIEditSongModal />;
+    }
+    else if (store.isRemoveSongModalOpen()) {
+        modalJSX = <MUIRemoveSongModal />;
+    }
     return (
         <div
             key={index}
@@ -56,6 +67,7 @@ function SongCard(props) {
             onDrop={handleDrop}
             draggable="true"
             onClick={handleClick}
+            style={{ width: '96%', fontSize: '16pt', background:'#A7C7E7', borderRadius:'30px'}}
         >
             {index + 1}.
             <a
@@ -71,6 +83,7 @@ function SongCard(props) {
                 value={"\u2715"}
                 onClick={handleRemoveSong}
             />
+            { modalJSX }
         </div>
     );
 }

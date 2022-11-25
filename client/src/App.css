@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat&family=Dancing+Script&family=Kaushan+Script&family=Rubik+Glitch&display=swap');
 :root {
   /* 
         FIRST WE'LL DEFINE OUR SWATCHES, i.e. THE COMPLEMENTARY
@@ -6,26 +7,20 @@
     
         @author McKilla Gorilla
     */
-  --swatch-foundation: ##8ccfed;
-  --swatch-primary: #e6e6e6;
-  --swatch-complement: #e1e4cb;
-  --swatch-contrast: #111111;
-  --swatch-accent: #669966;
-  --swatch-status: #123456;
   --my-font-family: "Robaaaoto";
   --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
 }
 
-body {
-  background-color: var(--swatch-foundation);
-}
-
 #root {
-  background-color: var(--swatch-primary);
+  background: rgb(248,200,220);
+  background: linear-gradient(90deg, rgba(248,200,220,1) 0%, rgba(167,199,231,1) 88%);
   font-family: "Lexend Exa";
   width: 100%;
   height: 100%;
   overflow: hidden;
+  position: absolute;
+  left:0;
+  top:0;
 }
 
 #app-root {
@@ -55,47 +50,88 @@ body {
 #splash-screen { 
   background: rgb(248,200,220);
   background: linear-gradient(90deg, rgba(248,200,220,1) 0%, rgba(167,199,231,1) 88%);
+  /*background: rgb(213,231,184);
+  background: linear-gradient(0deg, rgba(213,231,184,1) 0%, rgba(75,126,78,1) 100%);*/
   font-size: 5vw;
   border-color: black;
-  height: 90vh;
+  height: 100vh;
   text-align: center;
   vertical-align: center;
+  overflow: hidden;
+}
+
+#playlist-wrapper{
+  height: 90vh;
+  display: flex;
 }
 
 #splash-screen-buttons {
-  margin-top: 7ch;
+  margin-top: 5ch;
 }
 
 #playlister {
-  padding-top: 4ch;
+  font-family: 'Kaushan Script', cursive;
+  color: #ad0d0d;
+  font-size: 4ch;
+  padding-top: 1.3ch;
   
 }
 
+#Secondary-toolbar {
+  width: 100%;
+  float: right;
+}
+
+#playlister-Logo {
+  font-family: 'Dancing Script', cursive;
+  color: #ad0d0d;
+  font-size: 70%;
+}
+
+#playlister-purpose-statement {
+  font-family: 'Caveat', cursive;
+  padding-top: 1ch;
+  color: rgb(255, 255, 255);
+  font-size: 30px;
+}
+
 #createAccount {
-  background-color: #fff;
+  background-color: rgb(0, 0, 0);
   width: 12%;
   min-width: 10ch;
   height: 6vh;
   margin: 3ch;
+  color: #cccccc;
   border-radius: 10px;
+  border-color: rgb(247, 184, 210);
+  border-width: 5px;
+  border-style: double;
 }
 
 #continueAsGuest {
-  background-color:#fff;
+  background-color:rgb(0, 0, 0);
   width: 12%;
   min-width: 10ch;
   height: 6vh;
   margin: 3ch;
+  color: #cccccc;
   border-radius: 10px;
+  border-color: rgb(169, 173, 208);
+  border-width: 5px;
+  border-style: double;
 }
 
 #login {
-  background-color: #fff;
+  background-color: rgb(0, 0, 0);
   width: 12%;
   min-width: 10ch;
   height: 6vh;
   margin: 3ch;
   border-radius: 10px;
+  color: #cccccc;
+  border-color: rgb(211, 187, 233);
+  border-width: 5px;
+  border-style: double;
 }
 
 #edit-toolbar {
@@ -123,24 +159,37 @@ body {
   cursor: not-allowed;
 }
 
+#playlist-selector{
+  width: 50%;
+  float: left;
+}
+
 #playlister-list-selector {
-  position: absolute;
   left: 0%;
   top: 10%;
-  width: 100%;
   height: 80%;
-  background-color: var(--swatch-primary);
+  background: rgb(248,200,220);
+  background: linear-gradient(90deg, rgba(248,200,220,1) 0%, rgba(167,199,231,1) 88%);
 }
 
 #playlister-workspace {
+  background: rgb(248,200,220);
+  background: linear-gradient(90deg, rgba(248,200,220,1) 0%, rgba(167,199,231,1) 88%);
   position: absolute;
   left: 0%;
   top: 10%;
+  width: 50%;
   width: 100%;
-  background-color: var(--swatch-accent);
 }
 
-#-statusbar {
+#youtubePlayer {
+  width: 50%;
+  float: right;
+  margin-top: .40%;
+  height: 90%;
+}
+
+#playlister-statusbar {
   position: absolute;
   left: 0%;
   top: 90%;
@@ -155,7 +204,6 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 36pt;
-  z-index: -1;
 }
 
 #list-selector-heading {
@@ -177,11 +225,9 @@ body {
 }
 
 #list-selector-list {
-  position: absolute;
-  left: 0%;
-  top: 10%;
   width: 100%;
   height: 90%;
+  margin-top: .80%;
   display: flex;
   flex-direction: column;
   overflow: scroll;
@@ -193,7 +239,6 @@ body {
   font-size: 18pt;
   margin: 10px;
   padding: 20px;
-  border-radius: 25px;
 }
 
 .list-card:aria-disabled,
@@ -202,6 +247,7 @@ body {
   background-color: #cccccc;
   color: #666666;
   pointer-events: none;
+  border-radius: 25px;
 }
 
 .unselected-list-card:hover {
@@ -213,10 +259,12 @@ body {
 .selected-list-card {
   background-color: var(--swatch-accent);
   color: white;
+  border-radius: 30px;
 }
 
 .unselected-list-card {
   background-color: var(--swatch-complement);
+  border-radius: 25px;
 }
 
 .list-card-button {

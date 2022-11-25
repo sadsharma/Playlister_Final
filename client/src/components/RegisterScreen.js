@@ -78,6 +78,17 @@ export default function RegisterScreen() {
                                     autoComplete="email"
                                 />
                             </Grid>
+
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="username"
+                                    label="Username"
+                                    name="username"
+                                    autoComplete="email"
+                                />
+                            </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     required
