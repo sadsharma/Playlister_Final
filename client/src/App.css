@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat&family=Dancing+Script&family=Kaushan+Script&family=Rubik+Glitch&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat&family=Dancing+Script&family=Fredericka+the+Great&family=Kaushan+Script&family=Rubik+Glitch&display=swap');
 :root {
   /* 
         FIRST WE'LL DEFINE OUR SWATCHES, i.e. THE COMPLEMENTARY
@@ -70,7 +70,9 @@
 }
 
 #playlister {
-  font-family: 'Kaushan Script', cursive;
+  font-family: 'kushan script', cursive;
+  font-style: bold;
+  font-weight: 800;
   color: #ad0d0d;
   font-size: 4ch;
   padding-top: 1.3ch;
@@ -182,6 +184,12 @@
   width: 100%;
 }
 
+#playlist-cards {
+  max-height: 50vh;
+  overflow-y: scroll;
+  margin-top: 3%;
+}
+
 #youtubePlayer {
   width: 50%;
   float: right;
@@ -192,18 +200,91 @@
 #playlister-statusbar {
   position: absolute;
   left: 0%;
-  top: 90%;
+  top: 93%;
   width: 100%;
-  height: 10%;
-  background-color: #8ccfed;
-  border-color: black;
-  border-width: 2px;
-  border-style: solid;
-  border-radius: 10px;
+  height: 7%;
+  background-color: #8cceed64;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 36pt;
+}
+
+#playlist-name {
+  font-family: 'Caveat', cursive;
+}
+
+#userName {
+  position: absolute;
+  top: 4%;
+  left: 2%;
+}
+
+#published {
+  position: absolute;
+  top: 70%;
+  left: 70%;
+}
+
+#like-button {
+  position: absolute;
+  top: 5%;
+  left: 65%;
+}
+
+#dislike-button {
+  position: absolute;
+  top: 5%;
+  left: 75%;
+}
+
+#expand-button {
+  position: absolute;
+  top: 5%;
+  left: 85%;
+}
+
+#youtube-player {
+  width: 100%;
+  height: 40vh;
+  border-color: black;
+  border-style: double;
+}
+#youtube-player-controller {
+  width: 100%;
+  height: 22vh;
+  border-color: black;
+  border-style: double;
+}
+
+#comment-section {
+  width: 100%;
+  height: 63vh;
+  border-color: black;
+  border-style: double;
+}
+
+#input-comment-section{
+  position: relative;
+  height: 20%;
+  width: 90%;
+  background-color: #62672300;
+}
+
+#comment-display{
+  width: 105%;
+  height: 49.7vh;
+  overflow: scroll;
+}
+
+#comment-card {
+  width: 100%;
+  height: 5vh;
+  background-color: rgb(169, 185, 241);
+  margin-bottom: 2%;
+  border-radius: 20px;
+  padding-left: 5%;
+  padding-top: 2%;
 }
 
 #list-selector-heading {
@@ -211,9 +292,8 @@
   left: 30%;
   top: 0%;
   width: 50%;
-  height: 10%;
   text-align: center;
-  font-size: 16pt;
+  font-size: 5pt;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -222,11 +302,19 @@
 
 #add-list-button {
   float: left;
+  margin-top: .9%;
+  transform: scale(.8);
+}
+
+#add-list {
+  font-family: 'Kaushan Script', cursive;
+  font-size: 10ch;
+  margin-top: .4%;
 }
 
 #list-selector-list {
   width: 100%;
-  height: 90%;
+  height: 84%;
   margin-top: .80%;
   display: flex;
   flex-direction: column;
@@ -253,12 +341,12 @@
 .unselected-list-card:hover {
   cursor: pointer;
   background-color: var(--swatch-contrast);
-  color: white;
+  color: rgb(133, 120, 232);
 }
 
 .selected-list-card {
   background-color: var(--swatch-accent);
-  color: white;
+  color: rgb(163, 232, 208);
   border-radius: 30px;
 }
 
@@ -269,7 +357,7 @@
 
 .list-card-button {
   float: right;
-  transform: scale(2);
+  transform: scale(1);
 }
 
 #workspace-home,

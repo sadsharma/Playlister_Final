@@ -67,7 +67,7 @@ function SongCard(props) {
             onDrop={handleDrop}
             draggable="true"
             onClick={handleClick}
-            style={{ width: '96%', fontSize: '16pt', background:'#A7C7E7', borderRadius:'30px'}}
+            style={{ width: '96%', fontSize: '16pt', background:'white', borderRadius:'30px'}}
         >
             {index + 1}.
             <a
@@ -80,7 +80,7 @@ function SongCard(props) {
                 type="button"
                 id={"remove-song-" + index}
                 className="list-card-button"
-                value={"\u2715"}
+                value={"X"}
                 onClick={handleRemoveSong}
             />
             { modalJSX }

@@ -53,6 +53,7 @@ function GlobalStoreContextProvider(props) {
         currentModal : CurrentModal.NONE,
         idNamePairs: [],
         currentList: null,
+        currentViewerList: null,
         currentSongIndex : -1,
         currentSong : null,
         newListCounter: 0,
@@ -149,9 +150,24 @@ function GlobalStoreContextProvider(props) {
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
                     currentList: payload,
+                    currentViewerList: payload,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null
+                });
+            }
+
+            case GlobalStoreActionType.PUBLISH_LIST: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: payload,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null
@@ -284,12 +300,13 @@ function GlobalStoreContextProvider(props) {
         });
         history.push("/");
         tps.clearAllTransactions();
+        store.loadIdNamePairs();
     }
 
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
-        const response = await api.createPlaylist(newListName, [], auth.user.email);
+        const response = await api.createPlaylist(newListName, [], auth.user.email, [], 0, 0, 0, false, (new Date()), "hi");
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();
@@ -299,13 +316,11 @@ function GlobalStoreContextProvider(props) {
                 payload: newList
             }
             );
-
-            // IF IT'S A VALID LIST THEN LET'S START EDITING IT
-            history.push("/playlist/" + newList._id);
         }
         else {
             console.log("API FAILED TO CREATE A NEW LIST");
         }
+        store.loadIdNamePairs();
     }
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
@@ -566,6 +581,24 @@ function GlobalStoreContextProvider(props) {
             type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
             payload: null
         });
+    }
+
+    store.publishList = function() {
+        console.log("got to publish list");
+        store.currentList.published = true;
+        store.updateCurrentList();
+    }
+
+    store.submitComment = function(newComment, user) {
+        console.log(store.currentList);
+        console.log(newComment);
+        let comment = {
+            text: newComment,
+            userName: user,
+        }
+        store.currentList.comments.push(comment);
+        store.updateCurrentList();
+        document.getElementById("input-comment-section").value = "";
     }
 
     return (

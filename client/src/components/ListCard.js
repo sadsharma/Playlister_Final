@@ -13,6 +13,10 @@ import SongCard from './SongCard.js';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import AddIcon from '@mui/icons-material/Add';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import { Button } from '@mui/material';
+import { useHistory } from 'react-router-dom'
 
 
 /*
@@ -87,6 +91,10 @@ function ListCard(props) {
         setText(event.target.value);
     }
 
+    function publishList() {
+        store.publishList(idNamePair.id);
+    }
+
     let selectClass = "unselected-list-card";
     if (selected) {
         selectClass = "selected-list-card";
@@ -95,81 +103,126 @@ function ListCard(props) {
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
+
+    let color = '#A7C7E7';
+    if(idNamePair.published === true)
+    {
+        color = '#6faeee';
+    }
+
     let cardElement =
         <ThemeProvider theme={theme}>
         <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
             sx={{ marginTop: '15px', display: 'flex', p: 1}}
-            style={{ width: '100%', fontSize: '24pt', background:'#A7C7E7', borderRadius:'30px'}}
+            style={{ width: '100%', height:'14vh', fontSize: '24pt', background:color, borderRadius:'10px'}}
             button
         >
-            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                    <EditIcon style={{fontSize:'24pt'}} />
-                </IconButton>
-            </Box>
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={(event) => {
-                        handleDeleteList(event, idNamePair._id)
-                    }} aria-label='delete'>
-                    <DeleteIcon style={{fontSize:'24pt'}} />
-                </IconButton>
-            </Box>     
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={(event) => {
-                handleLoadList(event, idNamePair._id)
-            }} aria-label='open'>
-                    <KeyboardArrowDownIcon style={{fontSize:'24pt'}} />
-                </IconButton>
-            </Box>     
+            <div id="userName">
+                <span className="team" title="Home">{idNamePair.name}</span>
+                <Box sx={{ p: 1, fontSize: '10pt',}}>{"By" + " filler"}</Box>
+                <Box sx={{ p: 1, fontSize: '10pt',}}>{"Listens:" + " filler"}</Box>
+            </div>
+            <Box sx={{ p: 1, flexGrow: 1 }}/>
+                <Box id="like-button" sx={{ p: 1, transform: "scale(.8)", }}>
+                    <IconButton onClick={handleToggleEdit} aria-label='like'>
+                        <ThumbUpIcon style={{fontSize:'24pt'}} /> 1 
+                    </IconButton>
+                </Box>
+                <Box id="dislike-button" sx={{ p: 1, transform: "scale(.8)", }}>
+                    <IconButton onClick={handleToggleEdit} aria-label='dislike'>
+                        <ThumbDownIcon style={{fontSize:'24pt'}} /> 1 
+                    </IconButton>
+                </Box>   
+                <Box sx={{ p: 1 }}>
+                    <IconButton onClick={(event) => {
+                    handleLoadList(event, idNamePair._id)
+                }} aria-label='open'>
+                        <KeyboardArrowDownIcon style={{fontSize:'24pt'}} />
+                    </IconButton>
+                </Box>
+                <Box id="published" sx={{ p: 1, fontSize: '10pt',}}>{"Listens:" + " filler"}</Box>
         </ListItem>
         </ThemeProvider>
 
     if(store.currentList !== null && store.currentList._id === idNamePair._id)
     {
+        if(store.currentList.published === true)
+        {
+            color = '#6faeee';
+        }
         cardElement = 
         <ThemeProvider theme={theme}>
+        <Box style={{background:color, borderRadius:'10px'}}>
         <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
             sx={{ marginTop: '15px', display: 'flex', p: 1}}
-            style={{ width: '100%', fontSize: '24pt', background:'#A7C7E7', borderRadius:'30px'}}
+            style={{ width: '100%', height:'5vh', fontSize: '24pt'}}
             button
         >
-            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-            <Box sx={{ p: 1 }}>
+            <div id="userName">
+                <span className="team" title="Home">{idNamePair.name}</span>
+                <Box sx={{ p: 1, fontSize: '10pt',}}>{"By" + " filler"}</Box>
+            </div>
+            <Box sx={{ p: 1, flexGrow: 1 }}/>
+            <Box sx={{ p: 1, transform: "scale(.8)", }}>
                 <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                    <EditIcon style={{fontSize:'24pt'}} />
+                    <ThumbUpIcon style={{fontSize:'24pt'}} /> 1 
                 </IconButton>
             </Box>
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={handleCloseList} aria-label='close'>
-                    <ExpandLessIcon style={{fontSize:'24pt'}} />
-                </IconButton>
-            </Box>
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={handleAddSong} aria-label='close'>
-                    <AddIcon style={{fontSize:'24pt'}} />
+            <Box sx={{ p: 1, transform: "scale(.8)", }}>
+                <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                    <ThumbDownIcon style={{fontSize:'24pt'}} /> 1 
                 </IconButton>
             </Box>
         </ListItem>
-        <List 
-            id="playlist-cards" 
-            sx={{ width: '100%', bgcolor: 'background.paper' }}
-        >
-            {
-                store.currentList.songs.map((song, index) => (
-                    <SongCard
-                        id={'playlist-song-' + (index)}
-                        key={'playlist-song-' + (index)}
-                        index={index}
-                        song={song}
-                    />
-                ))  
-            }
-         </List>    
+        <div id="playlist-cards" >
+            <List 
+                sx={{ width: '90%', bgcolor: 'transparent'}}
+            >
+                {
+                    store.currentList.songs.map((song, index) => (
+                        <SongCard
+                            id={'playlist-song-' + (index)}
+                            key={'playlist-song-' + (index)}
+                            index={index}
+                            song={song}
+                        />
+                    ))  
+                }
+            </List>
+         </div>
+         <ListItem id="list-card-buttons">
+            <Box sx={{ p: 1, flexGrow: 1 }}/>
+            <Box sx={{ p: 1, transform: "scale(.8)", }}>
+                    <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                        <EditIcon style={{fontSize:'24pt'}} />
+                    </IconButton>
+                </Box>
+            <Box sx={{ p: 1, transform: "scale(.8)", }}>
+            <IconButton onClick={(event) => {
+                    handleDeleteList(event, idNamePair._id)
+                }} aria-label='delete'>
+                <DeleteIcon style={{fontSize:'24pt'}} />
+            </IconButton>
+            </Box>  
+            <Box sx={{ p: 1 }}>
+                    <IconButton onClick={handleAddSong} aria-label='close'>
+                        <AddIcon style={{fontSize:'24pt'}} />
+                    </IconButton>
+                </Box>
+                <Box sx={{ p: 1 }}>
+                    <Button onClick={publishList}>Publish</Button>
+                </Box>
+                <Box sx={{ p: 1 }}>
+                    <IconButton onClick={handleCloseList} aria-label='close'>
+                        <ExpandLessIcon style={{fontSize:'24pt'}} />
+                    </IconButton>
+                </Box>
+        </ListItem>
+        </Box>
         </ThemeProvider>
     }
 
