@@ -7,7 +7,6 @@ import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import blue from '@mui/material/colors/blue';
 import List from '@mui/material/List';
 import SongCard from './SongCard.js';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -17,6 +16,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { Button } from '@mui/material';
 import { useHistory } from 'react-router-dom'
+import { blueGrey } from '@mui/material/colors';
 
 
 /*
@@ -34,11 +34,12 @@ function ListCard(props) {
 
     const theme = createTheme({
         palette: {
-          primary: blue,
+          primary: blueGrey,
         },
       });
 
     function handleLoadList(event, id) {
+        event.stopPropagation();
         console.log("handleLoadList for " + id);
         if (!event.target.disabled) {
             let _id = event.target.id;
@@ -52,8 +53,27 @@ function ListCard(props) {
         }
     }
 
-    function handleCloseList() {
+    function setCurrentViewPlaylist(event, id) {
+        event.stopPropagation();
+        console.log("handleLoadList for " + id);
+        if (!event.target.disabled) {
+            let _id = event.target.id;
+            if (_id.indexOf('list-card-text-') >= 0)
+                _id = ("" + _id).substring("list-card-text-".length);
+
+            console.log("load " + event.target.id);
+
+            // CHANGE THE CURRENT LIST
+            store.setCurrentViewList(id);
+        }
+    }
+
+    async function handleCloseList() {
         store.closeCurrentList();
+    }
+
+    async function handleLike() {
+        store.handleLikingPlaylist(idNamePair._id);
     }
 
     function handleToggleEdit(event) {
@@ -95,6 +115,12 @@ function ListCard(props) {
         store.publishList(idNamePair.id);
     }
 
+    function duplicatePlaylist() {
+        console.log(idNamePair);
+        console.log("current list" + store.currentList);
+        store.duplicatePlaylist(idNamePair);
+    }
+
     let selectClass = "unselected-list-card";
     if (selected) {
         selectClass = "selected-list-card";
@@ -105,12 +131,16 @@ function ListCard(props) {
     }
 
     let color = '#A7C7E7';
+    let date;
+    let likes;
     if(idNamePair.published === true)
     {
         color = '#6faeee';
+        date = idNamePair.publishedDate.substring(0,10);
+        likes = idNamePair.likes.length;
     }
 
-    let cardElement =
+    let publishedCard =
         <ThemeProvider theme={theme}>
         <ListItem
             id={idNamePair._id}
@@ -118,16 +148,17 @@ function ListCard(props) {
             sx={{ marginTop: '15px', display: 'flex', p: 1}}
             style={{ width: '100%', height:'14vh', fontSize: '24pt', background:color, borderRadius:'10px'}}
             button
+            onClick={(event) => setCurrentViewPlaylist(event, idNamePair._id)}
         >
             <div id="userName">
                 <span className="team" title="Home">{idNamePair.name}</span>
-                <Box sx={{ p: 1, fontSize: '10pt',}}>{"By" + " filler"}</Box>
-                <Box sx={{ p: 1, fontSize: '10pt',}}>{"Listens:" + " filler"}</Box>
+                <Box sx={{ p: 1, fontSize: '10pt',}}>By {idNamePair.userName}</Box>
+                <Box sx={{ p: 1, fontSize: '10pt',}}>Published Date: {date}</Box>
             </div>
             <Box sx={{ p: 1, flexGrow: 1 }}/>
                 <Box id="like-button" sx={{ p: 1, transform: "scale(.8)", }}>
-                    <IconButton onClick={handleToggleEdit} aria-label='like'>
-                        <ThumbUpIcon style={{fontSize:'24pt'}} /> 1 
+                    <IconButton onClick={handleLike} aria-label='like'>
+                        <ThumbUpIcon style={{fontSize:'24pt'}} /> {likes}
                     </IconButton>
                 </Box>
                 <Box id="dislike-button" sx={{ p: 1, transform: "scale(.8)", }}>
@@ -146,12 +177,40 @@ function ListCard(props) {
         </ListItem>
         </ThemeProvider>
 
-    if(store.currentList !== null && store.currentList._id === idNamePair._id)
+    let unpublishedCard =
+        <ThemeProvider theme={theme}>
+        <ListItem
+            id={idNamePair._id}
+            key={idNamePair._id}
+            sx={{ marginTop: '15px', display: 'flex', p: 1}}
+            style={{ width: '100%', height:'12vh', fontSize: '24pt', background:color, borderRadius:'10px'}}
+            button
+            onClick={(event) => setCurrentViewPlaylist(event, idNamePair._id)}
+        >
+            <div id="userName">
+                <span className="team" title="Home">{idNamePair.name}</span>
+                <Box sx={{ p: 1, fontSize: '10pt',}}>By {idNamePair.userName}</Box>
+            </div>
+            <Box sx={{ p: 1, flexGrow: 1 }}/>
+                <Box sx={{ p: 1 }}>
+                    <IconButton onClick={(event) => {
+                    handleLoadList(event, idNamePair._id)
+                }} aria-label='open'>
+                        <KeyboardArrowDownIcon style={{fontSize:'24pt'}} />
+                    </IconButton>
+                </Box>
+        </ListItem>
+        </ThemeProvider>
+
+    let cardElement = unpublishedCard;
+    if(idNamePair.published === true)
     {
-        if(store.currentList.published === true)
-        {
-            color = '#6faeee';
-        }
+        cardElement = publishedCard;
+    }
+        
+    if(store.currentList !== null && store.currentList._id === idNamePair._id && store.currentList.published === true)
+    {
+        color = '#6faeee';
         cardElement = 
         <ThemeProvider theme={theme}>
         <Box style={{background:color, borderRadius:'10px'}}>
@@ -161,10 +220,11 @@ function ListCard(props) {
             sx={{ marginTop: '15px', display: 'flex', p: 1}}
             style={{ width: '100%', height:'5vh', fontSize: '24pt'}}
             button
+            onClick={(event) => setCurrentViewPlaylist(event, idNamePair._id)}
         >
             <div id="userName">
                 <span className="team" title="Home">{idNamePair.name}</span>
-                <Box sx={{ p: 1, fontSize: '10pt',}}>{"By" + " filler"}</Box>
+                <Box sx={{ p: 1, fontSize: '10pt',}}>By {idNamePair.userName}</Box>
             </div>
             <Box sx={{ p: 1, flexGrow: 1 }}/>
             <Box sx={{ p: 1, transform: "scale(.8)", }}>
@@ -197,9 +257,6 @@ function ListCard(props) {
          <ListItem id="list-card-buttons">
             <Box sx={{ p: 1, flexGrow: 1 }}/>
             <Box sx={{ p: 1, transform: "scale(.8)", }}>
-                    <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                        <EditIcon style={{fontSize:'24pt'}} />
-                    </IconButton>
                 </Box>
             <Box sx={{ p: 1, transform: "scale(.8)", }}>
             <IconButton onClick={(event) => {
@@ -209,12 +266,9 @@ function ListCard(props) {
             </IconButton>
             </Box>  
             <Box sx={{ p: 1 }}>
-                    <IconButton onClick={handleAddSong} aria-label='close'>
-                        <AddIcon style={{fontSize:'24pt'}} />
-                    </IconButton>
                 </Box>
-                <Box sx={{ p: 1 }}>
-                    <Button onClick={publishList}>Publish</Button>
+                <Box sx={{ p: 1, color:'black'}}>
+                    <Button onClick={duplicatePlaylist}>Duplicate</Button>
                 </Box>
                 <Box sx={{ p: 1 }}>
                     <IconButton onClick={handleCloseList} aria-label='close'>
@@ -224,6 +278,73 @@ function ListCard(props) {
         </ListItem>
         </Box>
         </ThemeProvider>
+    }
+    else if(store.currentList !== null && store.currentList._id === idNamePair._id && store.currentList.published === false)
+    {
+        cardElement = 
+            <ThemeProvider theme={theme}>
+            <Box style={{background:color, borderRadius:'10px'}}>
+            <ListItem
+                id={idNamePair._id}
+                key={idNamePair._id}
+                sx={{ marginTop: '15px', display: 'flex', p: 1}}
+                style={{ width: '100%', height:'8vh', fontSize: '24pt'}}
+                button
+                onClick={(event) => setCurrentViewPlaylist(event, idNamePair._id)}
+            >
+                <div id="userName">
+                    <span className="team" title="Home">{idNamePair.name}</span>
+                    <Box sx={{ p: 1, fontSize: '10pt',}}>By {idNamePair.userName}</Box>
+                </div>
+                <Box sx={{ p: 1, flexGrow: 1 }}/>
+            </ListItem>
+            <div id="playlist-cards" >
+                <List 
+                    sx={{ width: '90%', bgcolor: 'transparent'}}
+                >
+                    {
+                        store.currentList.songs.map((song, index) => (
+                            <SongCard
+                                id={'playlist-song-' + (index)}
+                                key={'playlist-song-' + (index)}
+                                index={index}
+                                song={song}
+                            />
+                        ))  
+                    }
+                </List>
+                <div id="add-song-button" onClick={handleAddSong}><IconButton onClick={handleAddSong} aria-label='close'>
+                            <AddIcon style={{fontSize:'24pt'}} />
+                        </IconButton></div>
+            </div>
+            <ListItem id="list-card-buttons">
+                <Box sx={{ p: 1, flexGrow: 1 }}/>
+                <Box sx={{ p: 1, transform: "scale(.8)", }}>
+                        <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                            <EditIcon style={{fontSize:'24pt'}} />
+                        </IconButton>
+                    </Box>
+                <Box sx={{ p: 1, transform: "scale(.8)", }}>
+                <IconButton onClick={(event) => {
+                        handleDeleteList(event, idNamePair._id)
+                    }} aria-label='delete'>
+                    <DeleteIcon style={{fontSize:'24pt'}} />
+                </IconButton>
+                </Box>  
+                    <Box sx={{ p: 1 }}>
+                        <Button onClick={publishList}>Publish</Button>
+                    </Box>
+                    <Box sx={{ p: 1, color:'black'}}>
+                        <Button onClick={duplicatePlaylist}>Duplicate</Button>
+                    </Box>
+                    <Box sx={{ p: 1 }}>
+                        <IconButton onClick={handleCloseList} aria-label='close'>
+                            <ExpandLessIcon style={{fontSize:'24pt'}} />
+                        </IconButton>
+                    </Box>
+            </ListItem>
+            </Box>
+            </ThemeProvider>
     }
 
     if (editActive) {

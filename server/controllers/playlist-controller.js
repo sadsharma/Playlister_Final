@@ -132,6 +132,11 @@ getPlaylistPairs = async (req, res) => {
                             _id: list._id,
                             name: list.name,
                             published: list.published,
+                            publishedDate: list.publishedDate,
+                            publishedBy: list.publishedBy,
+                            songs: list.songs,
+                            userName: list.ownerEmail,
+                            likes: list.likes,
                         };
                         pairs.push(pair);
                     }
@@ -188,7 +193,10 @@ updatePlaylist = async (req, res) => {
                     list.name = body.playlist.name;
                     list.songs = body.playlist.songs;
                     list.published = body.playlist.published;
+                    list.publishedDate = body.playlist.publishedDate;
+                    list.publishedBy = body.playlist.publishedBy;
                     list.comments = body.playlist.comments;
+                    list.likes = body.playlist.likes;
                     list
                         .save()
                         .then(() => {

@@ -25,7 +25,7 @@ export default function CommentSection() {
         store.submitComment(newComment, auth.user.email);
     }
 
-    if(store.currentList === null)
+    if(store.currentViewList === null)
     {
         return null;
     }
@@ -37,8 +37,10 @@ export default function CommentSection() {
                 sx={{ width: '90%', bgcolor: 'transparent'}}
             >
                 {
-                    store.currentList.comments.map((comments, index) => (
-                        <div id="comment-card">{comments.text} by {comments.userName}</div>
+                    store.currentViewList.comments.map((comments) => (
+                        <div id="comment-card">
+                        <div id="comment-card-username">{comments.userName}</div><div id="comment-card-text">{comments.text}</div>
+                        </div>
                     ))  
                 }
                 </List>

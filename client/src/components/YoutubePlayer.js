@@ -18,10 +18,10 @@ export default function YouTubePlayer() {
 
     console.log(playlist);
 
-    if(store.currentList !== null)
-        for(let i = 0; i < store.currentList.songs.length; i++ )
+    if(store.currentViewList !== null && store.currentViewList !== undefined && store.currentViewList.songs !== null && store.currentViewList.songs !== undefined)
+        for(let i = 0; i < store.currentViewList.songs.length; i++ )
         {
-            playlist[i] = store.currentList.songs[i].youTubeId;
+            playlist[i] = store.currentViewList.songs[i].youTubeId;
         }
 
     console.log(playlist);
@@ -61,7 +61,10 @@ export default function YouTubePlayer() {
     }
 
     function onPlayerReady(event) {
-        store.player = event;
+        if(store.player === null || store.player === undefined)
+        {
+            store.player = event;
+        }
         loadAndPlayCurrentSong(event.target);
         event.target.playVideo();
     }
@@ -73,7 +76,10 @@ export default function YouTubePlayer() {
     function onPlayerStateChange(event) {
         let playerStatus = event.data;
         let player = event.target;
-        global_player = event;
+        if(store.player === null || store.player === undefined)
+        {
+            store.player = event;
+        }
         if (playerStatus === -1) {
             // VIDEO UNSTARTED
             console.log("-1 Video unstarted");
@@ -97,21 +103,21 @@ export default function YouTubePlayer() {
             console.log("5 Video cued");
         }
         document.getElementById("current-song").innerHTML = currentSong + 1;
-        document.getElementById("current-song-artist").innerHTML = store.currentList.songs[currentSong].artist;
-        document.getElementById("current-song-title").innerHTML = store.currentList.songs[currentSong].title;
+        document.getElementById("current-song-artist").innerHTML = store.currentViewList.songs[currentSong].artist;
+        document.getElementById("current-song-title").innerHTML = store.currentViewList.songs[currentSong].title;
     }
 
     function nextSong()
     {
         incSong();
-        loadAndPlayCurrentSong(global_player.target);
+        loadAndPlayCurrentSong(store.player.target);
         
     }
 
     function lastSong()
     {
         decSong();
-        loadAndPlayCurrentSong(global_player.target);
+        loadAndPlayCurrentSong(store.player.target);
         
     }
     
@@ -119,7 +125,7 @@ export default function YouTubePlayer() {
     {
         return (
             <div>
-                No video selected.
+                This playlist has no videos!
             </div>
         )
     }

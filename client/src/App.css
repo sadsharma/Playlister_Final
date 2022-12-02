@@ -187,7 +187,7 @@
 #playlist-cards {
   max-height: 50vh;
   overflow-y: scroll;
-  margin-top: 3%;
+  margin-top: 5%;
 }
 
 #youtubePlayer {
@@ -218,6 +218,7 @@
   position: absolute;
   top: 4%;
   left: 2%;
+  margin-top: 1.5%;
 }
 
 #published {
@@ -272,7 +273,7 @@
 }
 
 #comment-display{
-  width: 105%;
+  width: 105.3%;
   height: 49.7vh;
   overflow: scroll;
 }
@@ -282,9 +283,26 @@
   height: 5vh;
   background-color: rgb(169, 185, 241);
   margin-bottom: 2%;
-  border-radius: 20px;
+  border-radius: 3px;
   padding-left: 5%;
   padding-top: 2%;
+}
+
+#add-song-button {
+  position: relative;
+  width: 50%;
+  background-color: #a5abdc45;
+  border-radius: 40px;
+  padding-left: 50%;
+}
+
+#comment-card-username {
+  font-size: 70%;
+  color: rgb(4, 4, 209);
+}
+
+#listButtons {
+  color: black;
 }
 
 #list-selector-heading {
