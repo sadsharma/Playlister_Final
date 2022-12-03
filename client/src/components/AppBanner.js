@@ -43,6 +43,17 @@ export default function AppBanner() {
         auth.logoutUser();
     }
 
+    const handleHomeButton = () => {
+        store.handleHomeButtonClick();
+    }
+
+    const handleOnKeyDown = (e) => {
+        if(e.key === "Enter")
+        {
+            console.log(e.target.value);
+        }
+    }
+
     const menuId = 'primary-search-account-menu';
     const loggedOutMenu = (
         <Menu
@@ -120,7 +131,7 @@ export default function AppBanner() {
           transition: theme.transitions.create('width'),
           width: '100%',
           [theme.breakpoints.up('md')]: {
-            width: '20ch',
+            width: '50ch',
           },
         },
       }));
@@ -179,14 +190,17 @@ export default function AppBanner() {
                 }
                 <AppBar position="static" style={{ background: '#a7b8e3'}}>
                     <Toolbar id="Secondary-toolbar">
-                    <Link style={{ textDecoration: 'none', color: 'black' }} to='/'><BungalowIcon
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
-                        sx={{ mr: 2 }}
-                    >
-                    </BungalowIcon> </Link>
+                    <Link style={{ textDecoration: 'none', color: 'black' }} to='/'>
+                        <BungalowIcon
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="open drawer"
+                            sx={{ mr: 2 }}
+                            onClick={handleHomeButton}
+                        >
+                        </BungalowIcon> 
+                    </Link>
                     <Box sx={{ flexGrow: .02}}></Box>
                     <Groups2Icon
                         style={{ textDecoration: 'none', color: 'black' }}
@@ -217,6 +231,7 @@ export default function AppBanner() {
                         <StyledInputBase
                         placeholder="Search…"
                         inputProps={{ 'aria-label': 'search' }}
+                        onKeyDown={handleOnKeyDown}
                         />
                     </Search>
                     <Box sx={{ flexGrow: .50 }}></Box>

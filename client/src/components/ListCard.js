@@ -17,6 +17,7 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { Button } from '@mui/material';
 import { useHistory } from 'react-router-dom'
 import { blueGrey } from '@mui/material/colors';
+import AuthContext from '../auth'
 
 
 /*
@@ -31,6 +32,7 @@ function ListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
+    const { auth } = useContext(AuthContext);
 
     const theme = createTheme({
         palette: {
@@ -63,7 +65,6 @@ function ListCard(props) {
 
             console.log("load " + event.target.id);
 
-            // CHANGE THE CURRENT LIST
             store.setCurrentViewList(id);
         }
     }
@@ -74,6 +75,9 @@ function ListCard(props) {
 
     async function handleLike() {
         store.handleLikingPlaylist(idNamePair._id);
+    }
+    async function handleDislikingPlaylist() {
+        store.handleDislikingPlaylist(idNamePair._id);
     }
 
     function handleToggleEdit(event) {
@@ -121,6 +125,16 @@ function ListCard(props) {
         store.duplicatePlaylist(idNamePair);
     }
 
+    function handleUndo() {
+        
+        store.undo();
+    }
+
+    function handleRedo() {
+        
+        store.redo();
+    }
+
     let selectClass = "unselected-list-card";
     if (selected) {
         selectClass = "selected-list-card";
@@ -133,11 +147,23 @@ function ListCard(props) {
     let color = '#A7C7E7';
     let date;
     let likes;
+    let dislikes;
+    let colorOfLikeIcon;
+    let colorOfDislikeIcon;
     if(idNamePair.published === true)
     {
         color = '#6faeee';
         date = idNamePair.publishedDate.substring(0,10);
         likes = idNamePair.likes.length;
+        dislikes = idNamePair.dislikes.length;
+        if(idNamePair.likes.includes(auth.user.email))
+        {
+            colorOfLikeIcon = "#5b7551";
+        }
+        if(idNamePair.dislikes.includes(auth.user.email))
+        {
+            colorOfDislikeIcon = "#944547";
+        }
     }
 
     let publishedCard =
@@ -158,12 +184,12 @@ function ListCard(props) {
             <Box sx={{ p: 1, flexGrow: 1 }}/>
                 <Box id="like-button" sx={{ p: 1, transform: "scale(.8)", }}>
                     <IconButton onClick={handleLike} aria-label='like'>
-                        <ThumbUpIcon style={{fontSize:'24pt'}} /> {likes}
+                        <ThumbUpIcon style={{color: colorOfLikeIcon, fontSize:'24pt'}} /> {likes}
                     </IconButton>
                 </Box>
                 <Box id="dislike-button" sx={{ p: 1, transform: "scale(.8)", }}>
-                    <IconButton onClick={handleToggleEdit} aria-label='dislike'>
-                        <ThumbDownIcon style={{fontSize:'24pt'}} /> 1 
+                    <IconButton onClick={handleDislikingPlaylist} aria-label='dislike'>
+                        <ThumbDownIcon style={{color: colorOfDislikeIcon, fontSize:'24pt'}} /> {dislikes}
                     </IconButton>
                 </Box>   
                 <Box sx={{ p: 1 }}>
@@ -173,7 +199,7 @@ function ListCard(props) {
                         <KeyboardArrowDownIcon style={{fontSize:'24pt'}} />
                     </IconButton>
                 </Box>
-                <Box id="published" sx={{ p: 1, fontSize: '10pt',}}>{"Listens:" + " filler"}</Box>
+                <Box id="published" sx={{ p: 1, fontSize: '10pt',}}>Listens: {idNamePair.listens}</Box>
         </ListItem>
         </ThemeProvider>
 
@@ -227,16 +253,16 @@ function ListCard(props) {
                 <Box sx={{ p: 1, fontSize: '10pt',}}>By {idNamePair.userName}</Box>
             </div>
             <Box sx={{ p: 1, flexGrow: 1 }}/>
-            <Box sx={{ p: 1, transform: "scale(.8)", }}>
-                <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                    <ThumbUpIcon style={{fontSize:'24pt'}} /> 1 
+            <Box id="like-button" sx={{ p: 1, transform: "scale(.8)", }}>
+                <IconButton onClick={handleLike} aria-label='like'>
+                    <ThumbUpIcon style={{color: colorOfLikeIcon, fontSize:'24pt'}} /> {likes}
                 </IconButton>
             </Box>
-            <Box sx={{ p: 1, transform: "scale(.8)", }}>
-                <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                    <ThumbDownIcon style={{fontSize:'24pt'}} /> 1 
+            <Box id="dislike-button" sx={{ p: 1, transform: "scale(.8)", }}>
+                <IconButton onClick={handleDislikingPlaylist} aria-label='dislike'>
+                    <ThumbDownIcon style={{color: colorOfDislikeIcon, fontSize:'24pt'}} /> {dislikes}
                 </IconButton>
-            </Box>
+            </Box>   
         </ListItem>
         <div id="playlist-cards" >
             <List 
@@ -249,6 +275,7 @@ function ListCard(props) {
                             key={'playlist-song-' + (index)}
                             index={index}
                             song={song}
+                            published={true}
                         />
                     ))  
                 }
@@ -268,13 +295,18 @@ function ListCard(props) {
             <Box sx={{ p: 1 }}>
                 </Box>
                 <Box sx={{ p: 1, color:'black'}}>
-                    <Button onClick={duplicatePlaylist}>Duplicate</Button>
+                    <Button sx={{ p: 1, color:'black'}} onClick={duplicatePlaylist}>Duplicate</Button>
                 </Box>
                 <Box sx={{ p: 1 }}>
                     <IconButton onClick={handleCloseList} aria-label='close'>
-                        <ExpandLessIcon style={{fontSize:'24pt'}} />
+                        <ExpandLessIcon sx={{ p: 1, color:'black'}} style={{fontSize:'24pt'}} />
                     </IconButton>
                 </Box>
+        </ListItem>
+         <ListItem id="list-card-buttons">
+            <Box sx={{ p: 1, fontSize: '10pt',}}>Published Date: {date}</Box>
+            <Box sx={{ p: 1, flexGrow: 1 }}/>
+            <Box sx={{ p: 1, fontSize: '10pt',}}>Listens: {idNamePair.listens}</Box>
         </ListItem>
         </Box>
         </ThemeProvider>
@@ -313,7 +345,7 @@ function ListCard(props) {
                         ))  
                     }
                 </List>
-                <div id="add-song-button" onClick={handleAddSong}><IconButton onClick={handleAddSong} aria-label='close'>
+                <div id="add-song-button" onClick={handleAddSong}><IconButton aria-label='close'>
                             <AddIcon style={{fontSize:'24pt'}} />
                         </IconButton></div>
             </div>
@@ -332,10 +364,16 @@ function ListCard(props) {
                 </IconButton>
                 </Box>  
                     <Box sx={{ p: 1 }}>
-                        <Button onClick={publishList}>Publish</Button>
+                        <Button sx={{ p: 1, color:'black'}} onClick={handleUndo} disabled={!store.canUndo()}>Undo</Button>
+                    </Box>
+                    <Box sx={{ p: 1 }}>
+                        <Button sx={{ p: 1, color:'black'}} onClick={handleRedo} disabled={!store.canRedo()}>Redo</Button>
+                    </Box>
+                    <Box sx={{ p: 1 }}>
+                        <Button sx={{ p: 1, color:'black'}} onClick={publishList}>Publish</Button>
                     </Box>
                     <Box sx={{ p: 1, color:'black'}}>
-                        <Button onClick={duplicatePlaylist}>Duplicate</Button>
+                        <Button sx={{ p: 1, color:'black'}} onClick={duplicatePlaylist}>Duplicate</Button>
                     </Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={handleCloseList} aria-label='close'>

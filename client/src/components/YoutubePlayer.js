@@ -102,15 +102,26 @@ export default function YouTubePlayer() {
             // THE VIDEO HAS BEEN CUED
             console.log("5 Video cued");
         }
-        document.getElementById("current-song").innerHTML = currentSong + 1;
-        document.getElementById("current-song-artist").innerHTML = store.currentViewList.songs[currentSong].artist;
-        document.getElementById("current-song-title").innerHTML = store.currentViewList.songs[currentSong].title;
+        document.getElementById("current-playlist").innerHTML = "Playlist: " + store.currentViewList.name;
+        document.getElementById("current-song").innerHTML = "Song #: " + (currentSong + 1);
+        document.getElementById("current-song-artist").innerHTML = "Song Artist: " + store.currentViewList.songs[currentSong].artist;
+        document.getElementById("current-song-title").innerHTML = "Song Title: " + store.currentViewList.songs[currentSong].title;
     }
 
     function nextSong()
     {
         incSong();
         loadAndPlayCurrentSong(store.player.target);
+        
+    }
+    function pauseSong()
+    {
+        store.player.target.pauseVideo();
+        
+    }
+    function playVideo()
+    {
+        store.player.target.playVideo();
         
     }
 
@@ -136,11 +147,18 @@ export default function YouTubePlayer() {
         opts={playerOptions}
         onReady={onPlayerReady}
         onStateChange={onPlayerStateChange} />
-        <div id="current-song">{currentSong + 1}</div>
-        <div id="current-song-title"></div>
-        <div id="current-song-artist"></div>
-        <button id="next-song" onClick={nextSong}>Next</button>
-        <button id="last-song" onClick={lastSong}>Previous</button>
+        <div id="player-text">
+            <div id="current-playlist">{}</div>
+            <div id="current-song">{}</div>
+            <div id="current-song-title"></div>
+            <div id="current-song-artist"></div>
+        </div>
+        <div id="player-buttons">
+                <button id="last-song" onClick={lastSong}>⪻</button>
+                <button id="pause-song" onClick={pauseSong}>▦</button>
+                <button id="play-song" onClick={playVideo}>⫸</button>
+                <button id="next-song" onClick={nextSong}>⪼</button>
+        </div>
         </div>
     )
 }

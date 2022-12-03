@@ -190,6 +190,42 @@
   margin-top: 5%;
 }
 
+#player-buttons {
+  width: 100%;
+}
+#last-song {
+  width: 10%;
+  height: 4vh;
+  margin-left: 30%;
+  font-size: 2vh;
+  background-color: #62672300;
+}
+#next-song {
+  width: 10%;
+  height: 4vh;
+  font-size: 2vh;
+  background-color: #62672300;
+}
+#play-song {
+  width: 10%;
+  height: 4vh;
+  font-size: 2vh;
+  background-color: #62672300;
+}
+#pause-song {
+  width: 10%;
+  height: 4vh;
+  font-size: 2vh;
+  background-color: #62672300;
+}
+
+#player-text{
+  font-family: 'Kushan Script', cursive;
+  font-weight: 900;
+  font-size: larger;
+  margin-left: 10%;
+}
+
 #youtubePlayer {
   width: 50%;
   float: right;
