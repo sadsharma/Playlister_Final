@@ -62,7 +62,10 @@ export default function AppBanner() {
         store.handleSearchByUserButtonClick();
     }
     const handleSortByName = () => {
-        
+        store.sortByName();
+    }
+    const handleSortByListens = () => {
+        store.sortByListens();
     }
 
     const handleOnKeyDown = (e) => {
@@ -138,7 +141,7 @@ export default function AppBanner() {
             <MenuItem>Sort by Published Date</MenuItem>
             <MenuItem>Sort by Likes</MenuItem>
             <MenuItem>Sort by Dislikes</MenuItem>
-            <MenuItem>Sort by Listens</MenuItem>
+            <MenuItem onClick={handleSortByListens}>Sort by Listens</MenuItem>
         </Menu>   )    
 
     let editToolbar = "";

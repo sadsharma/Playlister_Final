@@ -82,6 +82,7 @@ function GlobalStoreContextProvider(props) {
     // HANDLE EVERY TYPE OF STATE CHANGE
     const storeReducer = (action) => {
         const { type, payload } = action;
+        console.log(type + " " + payload)
         switch (type) {
             // LIST UPDATE OF ITS NAME
             case GlobalStoreActionType.CHANGE_LIST_NAME: {
@@ -219,7 +220,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.SORT_BY: {
                 return setStore({
                     currentModal : CurrentModal.NONE,
-                    idNamePairs: store.idNamePairs,
+                    idNamePairs: payload.array,
                     currentList: store.currentList,
                     currentViewList: store.currentViewList,
                     currentSongIndex: -1,
@@ -231,7 +232,7 @@ function GlobalStoreContextProvider(props) {
                     player: store.player,
                     currentView: store.currentView,
                     currentSearchQuery: store.currentSearchQuery,
-                    sortBy: payload,
+                    sortBy: payload.name,
                 });
             }
 
@@ -976,6 +977,67 @@ function GlobalStoreContextProvider(props) {
 
     store.sortByName = function()
     {
+        store.sortBy = "PLAYLIST-NAME";
+        let pairs = store.sortingFunction(store.idNamePairs)
+        storeReducer({
+            type: GlobalStoreActionType.SORT_BY,
+            payload: { array: pairs, name: store.sortBy}
+        });
+
+    }
+
+    store.sortByListens = function()
+    {
+        store.sortBy = "LISTENS";
+        let pairs = store.sortingFunction(store.idNamePairs)
+        storeReducer({
+            type: GlobalStoreActionType.SORT_BY,
+            payload: { array: pairs, name: store.sortBy}
+        });
+
+    }
+
+    store.sortByPublishedDate = function()
+    {
+        store.sortBy = "LISTENS";
+        let pairs = store.sortingFunction(store.idNamePairs)
+        storeReducer({
+            type: GlobalStoreActionType.SORT_BY,
+            payload: { array: pairs, name: store.sortBy}
+        });
+
+    }
+
+    store.sortingFunction = function(array)
+    {
+        if(store.sortBy === "")
+        {
+            return array;
+        }
+        if(store.sortBy === "PLAYLIST-NAME")
+        {
+            array.sort(function(a, b) {
+                const nameA = a.name.toUpperCase(); // ignore upper and lowercase
+                const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+                if (nameA < nameB) {
+                  return -1;
+                }
+                if (nameA > nameB) {
+                  return 1;
+                }
+              
+                // names must be equal
+                return 0;
+              });
+            return array;
+        }
+        if(store.sortBy === "LISTENS")
+        {
+            array.sort((s1, s2) => {
+                return s1.listens - s2.listens;
+            });
+            return array;
+        }
 
     }
 
