@@ -178,7 +178,7 @@ function ListCard(props) {
         >
             <div id="userName">
                 <span className="team" title="Home">{idNamePair.name}</span>
-                <Box sx={{ p: 1, fontSize: '10pt',}}>By {idNamePair.userName}</Box>
+                <Box sx={{ p: 1, fontSize: '10pt',}}>By {idNamePair.ownerEmail}</Box>
                 <Box sx={{ p: 1, fontSize: '10pt',}}>Published Date: {date}</Box>
             </div>
             <Box sx={{ p: 1, flexGrow: 1 }}/>
@@ -215,7 +215,7 @@ function ListCard(props) {
         >
             <div id="userName">
                 <span className="team" title="Home">{idNamePair.name}</span>
-                <Box sx={{ p: 1, fontSize: '10pt',}}>By {idNamePair.userName}</Box>
+                <Box sx={{ p: 1, fontSize: '10pt',}}>By {idNamePair.ownerEmail}</Box>
             </div>
             <Box sx={{ p: 1, flexGrow: 1 }}/>
                 <Box sx={{ p: 1 }}>
@@ -250,7 +250,7 @@ function ListCard(props) {
         >
             <div id="userName">
                 <span className="team" title="Home">{idNamePair.name}</span>
-                <Box sx={{ p: 1, fontSize: '10pt',}}>By {idNamePair.userName}</Box>
+                <Box sx={{ p: 1, fontSize: '10pt',}}>By {idNamePair.ownerEmail}</Box>
             </div>
             <Box sx={{ p: 1, flexGrow: 1 }}/>
             <Box id="like-button" sx={{ p: 1, transform: "scale(.8)", }}>
@@ -326,7 +326,7 @@ function ListCard(props) {
             >
                 <div id="userName">
                     <span className="team" title="Home">{idNamePair.name}</span>
-                    <Box sx={{ p: 1, fontSize: '10pt',}}>By {idNamePair.userName}</Box>
+                    <Box sx={{ p: 1, fontSize: '10pt',}}>By {idNamePair.ownerEmail}</Box>
                 </div>
                 <Box sx={{ p: 1, flexGrow: 1 }}/>
             </ListItem>

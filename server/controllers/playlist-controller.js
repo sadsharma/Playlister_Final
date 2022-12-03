@@ -135,7 +135,7 @@ getPlaylistPairs = async (req, res) => {
                             publishedDate: list.publishedDate,
                             publishedBy: list.publishedBy,
                             songs: list.songs,
-                            userName: list.ownerEmail,
+                            ownerEmail: list.ownerEmail,
                             likes: list.likes,
                             dislikes: list.dislikes,
                             listens: list.listens,
@@ -149,6 +149,7 @@ getPlaylistPairs = async (req, res) => {
         asyncFindList(user.email);
     }).catch(err => console.log(err))
 }
+
 getPlaylists = async (req, res) => {
     await Playlist.find({}, (err, playlists) => {
         if (err) {

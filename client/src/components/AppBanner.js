@@ -28,8 +28,14 @@ export default function AppBanner() {
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
+    let isLogoutMenuOpen = false;
+    let isSortMenuOpen = false;
 
     const handleProfileMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleSortMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
@@ -47,10 +53,29 @@ export default function AppBanner() {
         store.handleHomeButtonClick();
     }
 
+    function handleSearchByPlaylistButton () {
+        console.log("hihi");
+        store.handleSearchByPlaylistButtonClick();
+    }
+
+    const handleSearchByUserButton = () => {
+        store.handleSearchByUserButtonClick();
+    }
+    const handleSortByName = () => {
+        
+    }
+
     const handleOnKeyDown = (e) => {
         if(e.key === "Enter")
         {
-            console.log(e.target.value);
+            if(store.currentView === "SEARCH-BY-PLAYLIST-SCREEN")
+            {
+                store.retrieveAllPlaylists(e.target.value);
+            }
+            if(store.currentView === "SEARCH-BY-USER-SCREEN")
+            {
+                store.retrieveAllPlaylistsByUser(e.target.value);
+            }
         }
     }
 
@@ -75,7 +100,7 @@ export default function AppBanner() {
             <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
         </Menu>
     );
-    const loggedInMenu = 
+    const loggedInMenu = (
         <Menu
             anchorEl={anchorEl}
             anchorOrigin={{
@@ -88,11 +113,33 @@ export default function AppBanner() {
                 vertical: 'top',
                 horizontal: 'right',
             }}
-            open={isMenuOpen}
+            open={anchorEl !== null && anchorEl.id === "logout"}
             onClose={handleMenuClose}
         >
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
-        </Menu>        
+        </Menu>  )      
+    const sortMenu = (
+        <Menu
+            anchorEl={anchorEl}
+            anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            id={menuId}
+            keepMounted
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            open={anchorEl !== null && anchorEl.id === "sort"}
+            onClose={handleMenuClose}
+        >
+            <MenuItem onClick={handleSortByName}>Sort by Name</MenuItem>
+            <MenuItem>Sort by Published Date</MenuItem>
+            <MenuItem>Sort by Likes</MenuItem>
+            <MenuItem>Sort by Dislikes</MenuItem>
+            <MenuItem>Sort by Listens</MenuItem>
+        </Menu>   )    
 
     let editToolbar = "";
     let menu = loggedOutMenu;
@@ -131,7 +178,7 @@ export default function AppBanner() {
           transition: theme.transitions.create('width'),
           width: '100%',
           [theme.breakpoints.up('md')]: {
-            width: '50ch',
+            width: '68ch',
           },
         },
       }));
@@ -152,6 +199,23 @@ export default function AppBanner() {
         },
       }));
 
+    let colorOfHomeButton = 'black';
+    if(store.currentView === "HOME-SCREEN")
+    {
+        colorOfHomeButton = 'red';
+    }
+    let colorOfSearchByPlaylistButton = 'black';
+    if(store.currentView === "SEARCH-BY-PLAYLIST-SCREEN")
+    {
+        colorOfSearchByPlaylistButton = 'red';
+    }
+    let colorOfSearchByUserButton = 'black';
+    if(store.currentView === "SEARCH-BY-USER-SCREEN")
+    {
+        console.log("gets here?");
+        colorOfSearchByUserButton = 'red';
+    }
+    console.log(colorOfSearchByPlaylistButton);
     if(auth.loggedIn)
     {
         return (
@@ -171,6 +235,7 @@ export default function AppBanner() {
                         <Box sx={{ flexGrow: 1 }}></Box>
                         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                             <IconButton
+                                id="logout"
                                 style={{ textDecoration: 'none', color: 'black' }}
                                 size="large"
                                 edge="end"
@@ -194,32 +259,33 @@ export default function AppBanner() {
                         <BungalowIcon
                             size="large"
                             edge="start"
-                            color="inherit"
+                            color={colorOfHomeButton}
                             aria-label="open drawer"
-                            sx={{ mr: 2 }}
+                            sx={{ mr: 2, color: colorOfHomeButton}}
                             onClick={handleHomeButton}
                         >
                         </BungalowIcon> 
                     </Link>
                     <Box sx={{ flexGrow: .02}}></Box>
                     <Groups2Icon
-                        style={{ textDecoration: 'none', color: 'black' }}
+                        style={{ textDecoration: 'none'}}
                         size="large"
                         edge="start"
-                        color="inherit"
                         aria-label="open drawer"
-                        sx={{ mr: 2 }}
+                        sx={{ mr: 2, color: colorOfSearchByPlaylistButton}}
+                        onClick={handleSearchByPlaylistButton}
                     >
                         <MenuIcon />
                     </Groups2Icon>
                     <Box sx={{ flexGrow: .02}}></Box>
                     <Person4Icon
-                        style={{ textDecoration: 'none', color: 'black' }}
+                        style={{ textDecoration: 'none'}}
                         size="large"
                         edge="start"
                         color="inherit"
                         aria-label="open drawer"
-                        sx={{ mr: 2 }}
+                        sx={{ mr: 2, color: colorOfSearchByUserButton}}
+                        onClick={handleSearchByUserButton}
                     >
                         <MenuIcon />
                     </Person4Icon>
@@ -236,18 +302,23 @@ export default function AppBanner() {
                     </Search>
                     <Box sx={{ flexGrow: .50 }}></Box>
                     <SortIcon
+                        id="sort"
                         style={{ textDecoration: 'none', color: 'black' }}
                         size="large"
                         edge="start"
                         color="inherit"
                         aria-label="open drawer"
                         sx={{ mr: 2 }}
+                        onClick={handleSortMenuOpen}
                     >
                         <MenuIcon />
                     </SortIcon>
                     
                     </Toolbar>
                 </AppBar>
+                {
+                    sortMenu
+                }
             </Box>
         );
     }   
