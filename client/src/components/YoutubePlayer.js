@@ -17,6 +17,10 @@ export default function YouTubePlayer() {
     ];
 
     console.log(playlist);
+    if(store.currentViewList === null || store.currentViewList === undefined)
+    {
+        playlist.push("0");
+    }
 
     if(store.currentViewList !== null && store.currentViewList !== undefined && store.currentViewList.songs !== null && store.currentViewList.songs !== undefined)
         for(let i = 0; i < store.currentViewList.songs.length; i++ )
@@ -132,11 +136,19 @@ export default function YouTubePlayer() {
         
     }
     
-    if(playlist[0] === "0")
+    if(playlist.length === 1)
     {
         return (
             <div>
                 This playlist has no videos!
+            </div>
+        )
+    }
+    if(playlist[1] === "0")
+    {
+        return (
+            <div>
+                No list selected!
             </div>
         )
     }

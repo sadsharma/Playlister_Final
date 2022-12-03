@@ -212,7 +212,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     player: store.player,
-                    currentView: payload.view,
+                    currentView: store.currentView,
                     currentSearchQuery: store.currentSearchQuery,
                     sortBy: store.sortBy,
                 });
@@ -537,7 +537,20 @@ function GlobalStoreContextProvider(props) {
                 console.log("API FAILED TO GET THE LIST PAIRS");
             }
         }
-        asyncLoadIdNamePairs();
+
+        if(store.currentView === "HOME-SCREEN")
+        {
+            asyncLoadIdNamePairs();
+        }
+        else if(store.currentView === "SEARCH-BY-USER-SCREEN")
+        {
+            store.retrieveAllPlaylistsByUser(store.currentSearchQuery);
+        }
+        else
+        {
+            store.retrieveAllPlaylists(store.currentSearchQuery);
+        }
+
         
     }
 
@@ -850,11 +863,22 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-    store.duplicatePlaylist = function(idNamePair) {
-        store.createNewList();
-        console.log(store.currentList.songs);
-        console.log(idNamePair.songs);
-        store.currentList.songs = idNamePair.songs;
+    store.duplicatePlaylist = async function() {
+        const response = await api.createPlaylist("copy of " + store.currentList.name, store.currentList.songs, auth.user.email, [], [], [], 0, false, (new Date()), "hi");
+        console.log("createNewList response: " + response);
+        if (response.status === 201) {
+            tps.clearAllTransactions();
+            let newList = response.data.playlist;
+            storeReducer({
+                type: GlobalStoreActionType.CREATE_NEW_LIST,
+                payload: newList
+            }
+            );
+        }
+        else {
+            console.log("API FAILED TO CREATE A NEW LIST");
+        }
+        store.loadIdNamePairs();
     }
 
     store.handleLikingPlaylist = function(id) {
@@ -942,11 +966,15 @@ function GlobalStoreContextProvider(props) {
             const response = await api.getPlaylists();
             if (response.data.success) {
                 let pairsArray = response.data.data;
-                let newArray = pairsArray.filter(function(e1) { return e1.name.toLowerCase().includes(text.toLowerCase()) && e1.published;});
+                pairsArray = pairsArray.filter(function(e1) { return e1.published;});
+                if(text !== undefined && text !== "")
+                {
+                  pairsArray = pairsArray.filter(function(e1) { return e1.name.toLowerCase().includes(text.toLowerCase());});
+                }
                 console.log(pairsArray);
                 storeReducer({
                     type: GlobalStoreActionType.PLAYLIST_SEARCH,
-                    payload: { array: newArray, text: text}
+                    payload: { array: pairsArray, text: text}
                 });
             }
             else {
@@ -961,11 +989,15 @@ function GlobalStoreContextProvider(props) {
             const response = await api.getPlaylists();
             if (response.data.success) {
                 let pairsArray = response.data.data;
-                let newArray = pairsArray.filter(function(e1) { return e1.ownerEmail.toLowerCase().includes(text.toLowerCase()) && e1.published;});
+                pairsArray = pairsArray.filter(function(e1) { return e1.published;});
+                if(text !== undefined && text !== "")
+                {
+                    pairsArray = pairsArray.filter(function(e1) { return e1.ownerEmail.toLowerCase().includes(text.toLowerCase());});
+                }
                 console.log(pairsArray);
                 storeReducer({
                     type: GlobalStoreActionType.USER_SEARCH,
-                    payload: { array: newArray, text: text}
+                    payload: { array: pairsArray, text: text}
                 });
             }
             else {
@@ -999,7 +1031,28 @@ function GlobalStoreContextProvider(props) {
 
     store.sortByPublishedDate = function()
     {
-        store.sortBy = "LISTENS";
+        store.sortBy = "PUBLISHED-DATE";
+        let pairs = store.sortingFunction(store.idNamePairs)
+        storeReducer({
+            type: GlobalStoreActionType.SORT_BY,
+            payload: { array: pairs, name: store.sortBy}
+        });
+
+    }
+    store.sortByLikes = function()
+    {
+        store.sortBy = "LIKES";
+        let pairs = store.sortingFunction(store.idNamePairs)
+        storeReducer({
+            type: GlobalStoreActionType.SORT_BY,
+            payload: { array: pairs, name: store.sortBy}
+        });
+
+    }
+
+    store.sortByDislikes = function()
+    {
+        store.sortBy = "DISLIKES";
         let pairs = store.sortingFunction(store.idNamePairs)
         storeReducer({
             type: GlobalStoreActionType.SORT_BY,
@@ -1035,6 +1088,27 @@ function GlobalStoreContextProvider(props) {
         {
             array.sort((s1, s2) => {
                 return s1.listens - s2.listens;
+            });
+            return array;
+        }
+        if(store.sortBy === "PUBLISHED-DATE")
+        {
+            array.sort((x, y) => {
+               return x.publishedDate - y.publishedDate;
+           });
+            return array;
+        }
+        if(store.sortBy === "LIKES")
+        {
+            array.sort((s1, s2) => {
+                return s2.likes.length - s1.likes.length;
+            });
+            return array;
+        }
+        if(store.sortBy === "DISLIKES")
+        {
+            array.sort((s1, s2) => {
+                return s2.dislikes.length - s1.dislikes.length;
             });
             return array;
         }

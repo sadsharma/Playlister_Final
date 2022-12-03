@@ -67,6 +67,15 @@ export default function AppBanner() {
     const handleSortByListens = () => {
         store.sortByListens();
     }
+    const handleSortByPublishedDate = () => {
+        store.sortByPublishedDate();
+    }
+    const handleSortByLikes = () => {
+        store.sortByLikes();
+    }
+    const handleSortByDislikes = () => {
+        store.sortByDislikes();
+    }
 
     const handleOnKeyDown = (e) => {
         if(e.key === "Enter")
@@ -138,9 +147,9 @@ export default function AppBanner() {
             onClose={handleMenuClose}
         >
             <MenuItem onClick={handleSortByName}>Sort by Name</MenuItem>
-            <MenuItem>Sort by Published Date</MenuItem>
-            <MenuItem>Sort by Likes</MenuItem>
-            <MenuItem>Sort by Dislikes</MenuItem>
+            <MenuItem onClick={handleSortByPublishedDate}>Sort by Published Date</MenuItem>
+            <MenuItem onClick={handleSortByLikes}>Sort by Likes</MenuItem>
+            <MenuItem onClick={handleSortByDislikes}>Sort by Dislikes</MenuItem>
             <MenuItem onClick={handleSortByListens}>Sort by Listens</MenuItem>
         </Menu>   )    
 
