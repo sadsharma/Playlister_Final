@@ -45,8 +45,8 @@ export default function CommentSection() {
                 }
                 </List>
             </div>
-            <input id="input-comment-section"></input>
-            <button id="submit-comment-section" onClick={submitComment}>Submit</button>
+            <input id="input-comment-section" disabled={store.guestAccountCheck}></input>
+            <button id="submit-comment-section" onClick={submitComment} disabled={store.guestAccountCheck}>Submit</button>
         </div>
     )
 }

@@ -893,15 +893,18 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.submitComment = function(newComment, user) {
-        if(newComment.trim().length !== 0)
+        if(!store.guestAccountCheck)
         {
-        let comment = {
-            text: newComment,
-            userName: user,
-        }
-        store.currentViewList.comments.push(comment);
-        store.updateCurrentViewList();
-        document.getElementById("input-comment-section").value = "";
+            if(newComment.trim().length !== 0)
+            {
+            let comment = {
+                text: newComment,
+                userName: user,
+            }
+            store.currentViewList.comments.push(comment);
+            store.updateCurrentViewList();
+            document.getElementById("input-comment-section").value = "";
+            }
         }
     }
 
@@ -1036,7 +1039,7 @@ function GlobalStoreContextProvider(props) {
                 {
                     pairsArray = pairsArray.filter(function(e1) { return e1.ownerEmail.toLowerCase().includes(text.toLowerCase());});
                 }
-                console.log(pairsArray);
+                
                 storeReducer({
                     type: GlobalStoreActionType.USER_SEARCH,
                     payload: { array: pairsArray, text: text}

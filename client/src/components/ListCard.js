@@ -186,12 +186,12 @@ function ListCard(props) {
             </div>
             <Box sx={{ p: 1, flexGrow: 1 }}/>
                 <Box id="like-button" sx={{ p: 1, transform: "scale(.8)", }}>
-                    <IconButton onClick={handleLike} aria-label='like'>
+                    <IconButton onClick={handleLike} aria-label='like' disabled={store.guestAccountCheck}>
                         <ThumbUpIcon style={{color: colorOfLikeIcon, fontSize:'24pt'}} /> {likes}
                     </IconButton>
                 </Box>
                 <Box id="dislike-button" sx={{ p: 1, transform: "scale(.8)", }}>
-                    <IconButton onClick={handleDislikingPlaylist} aria-label='dislike'>
+                    <IconButton onClick={handleDislikingPlaylist} aria-label='dislike' disabled={store.guestAccountCheck}>
                         <ThumbDownIcon style={{color: colorOfDislikeIcon, fontSize:'24pt'}} /> {dislikes}
                     </IconButton>
                 </Box>   
@@ -257,12 +257,12 @@ function ListCard(props) {
             </div>
             <Box sx={{ p: 1, flexGrow: 1 }}/>
             <Box id="like-button" sx={{ p: 1, transform: "scale(.8)", }}>
-                <IconButton onClick={handleLike} aria-label='like'>
+                <IconButton disabled={store.guestAccountCheck} onClick={handleLike} aria-label='like'>
                     <ThumbUpIcon style={{color: colorOfLikeIcon, fontSize:'24pt'}} /> {likes}
                 </IconButton>
             </Box>
             <Box id="dislike-button" sx={{ p: 1, transform: "scale(.8)", }}>
-                <IconButton onClick={handleDislikingPlaylist} aria-label='dislike'>
+                <IconButton disabled={store.guestAccountCheck} onClick={handleDislikingPlaylist} aria-label='dislike'>
                     <ThumbDownIcon style={{color: colorOfDislikeIcon, fontSize:'24pt'}} /> {dislikes}
                 </IconButton>
             </Box>   
@@ -289,16 +289,16 @@ function ListCard(props) {
             <Box sx={{ p: 1, transform: "scale(.8)", }}>
                 </Box>
             <Box sx={{ p: 1, transform: "scale(.8)", }}>
-            <IconButton onClick={(event) => {
+            <IconButton disabled={store.guestAccountCheck} onClick={(event) => {
                     handleDeleteList(event, idNamePair._id)
                 }} aria-label='delete'>
-                <DeleteIcon style={{fontSize:'24pt'}} />
+                <DeleteIcon style={{fontSize:'24pt'}}  />
             </IconButton>
             </Box>  
             <Box sx={{ p: 1 }}>
                 </Box>
                 <Box sx={{ p: 1, color:'black'}}>
-                    <Button sx={{ p: 1, color:'black'}} onClick={duplicatePlaylist}>Duplicate</Button>
+                    <Button sx={{ p: 1, color:'black'}} onClick={duplicatePlaylist} disabled={store.guestAccountCheck}>Duplicate</Button>
                 </Box>
                 <Box sx={{ p: 1 }}>
                     <IconButton onClick={handleCloseList} aria-label='close'>
@@ -348,7 +348,7 @@ function ListCard(props) {
                         ))  
                     }
                 </List>
-                <div id="add-song-button" onClick={handleAddSong}><IconButton aria-label='close'>
+                <div id="add-song-button" onClick={handleAddSong} disabled={store.guestAccountCheck}><IconButton aria-label='close'>
                             <AddIcon style={{fontSize:'24pt'}} />
                         </IconButton></div>
             </div>
