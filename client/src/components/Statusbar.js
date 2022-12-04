@@ -38,8 +38,27 @@ function Statusbar() {
             </div>
         );
     }
-    else{
-        return null;
+    else if(store.currentView==="SEARCH-BY-USER-SCREEN"){
+        return (
+            <div id="playlister-statusbar">
+                <div id="list-selector-heading">
+                <Typography id="search-query" variant="h2">{store.currentSearchQuery} user</Typography>
+                </div>
+            </div>
+        );
+    }
+    else if(store.currentView ==="SEARCH-BY-PLAYLIST-SCREEN" ){
+        return (
+            <div id="playlister-statusbar">
+                <div id="list-selector-heading">
+                <Typography id="search-query" variant="h2">{store.currentSearchQuery} lists</Typography>
+                </div>
+            </div>
+        );
+    }
+    else
+    {
+        return null
     }
 }
 
