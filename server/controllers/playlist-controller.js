@@ -91,6 +91,7 @@ getPlaylistById = async (req, res) => {
         // DOES THIS LIST BELONG TO THIS USER?
     }).catch(err => console.log(err))
 }
+
 getPlaylistPairs = async (req, res) => {
     console.log("getPlaylistPairs");
     await User.findOne({ _id: req.userId }, (err, user) => {
@@ -132,7 +133,7 @@ getPlaylistPairs = async (req, res) => {
                 }
             }).catch(err => console.log(err))
         }
-        asyncFindList(user.email);
+        asyncFindList(user.userName);
     }).catch(err => console.log(err))
 }
 

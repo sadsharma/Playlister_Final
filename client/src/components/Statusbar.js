@@ -20,7 +20,7 @@ function Statusbar() {
     }
 
     let text ="";
-    if (auth.loggedIn && !auth.onlyRegistered)
+    if (auth.loggedIn && !auth.onlyRegistered && store.currentView==="HOME-SCREEN")
     {
         return (
             <div id="playlister-statusbar">

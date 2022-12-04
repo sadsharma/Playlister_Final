@@ -22,7 +22,9 @@ export default function CommentSection() {
         let newComment = document.getElementById("input-comment-section").value;
         console.log(newComment);
         console.log(auth.user.email);
-        store.submitComment(newComment, auth.user.email);
+        console.log(auth.user.userName);
+        console.log(auth.user);
+        store.submitComment(newComment, auth.user.userName);
     }
 
     if(store.currentViewList === null)

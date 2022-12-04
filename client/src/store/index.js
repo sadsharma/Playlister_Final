@@ -481,12 +481,32 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION PROCESSES CHANGING A LIST NAME
     store.changeListName = function (id, newName) {
+
+        let counter = 1;
+        let newListName = newName;
+        let array = store.idNamePairs.filter(function(e1) { return e1.name.toLowerCase() === newListName.toLowerCase();});
+        console.log(array.length);
+        if(array.length > 0)
+        {
+            let uniqueName = false;
+            while (uniqueName !== true)
+            {
+                let name = newName + " " + counter;
+                let array = store.idNamePairs.filter(function(e1) { console.log(e1.name.toLowerCase() +" "+ name.toLowerCase()); return e1.name.toLowerCase() === name.toLowerCase();});
+                if(array.length === 0)
+                {
+                    uniqueName = true;
+                    newListName = name;
+                }
+                counter++;
+            }       
+        }
         // GET THE LIST
         async function asyncChangeListName(id) {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
                 let playlist = response.data.playlist;
-                playlist.name = newName;
+                playlist.name = newListName;
                 async function updateList(playlist) {
                     response = await api.updatePlaylistById(playlist._id, playlist);
                     if (response.data.success) {
@@ -536,8 +556,21 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
-        let newListName = "Untitled" + store.newListCounter;
-        const response = await api.createPlaylist(newListName, [], auth.user.email, [], [], [], 0, false, (new Date()), "hi");
+        let counter = 0;
+        let newListName = "Untitled" + 0;
+        let uniqueName = false;
+        while (uniqueName !== true)
+        {
+            let name = "Untitled" + counter;
+            let array = store.idNamePairs.filter(function(e1) { return e1.name.toLowerCase() === name.toLowerCase();});
+            if(array.length === 0)
+            {
+                uniqueName = true;
+                newListName = name;
+            }
+            counter++;
+        }
+        const response = await api.createPlaylist(newListName, [], auth.user.userName, [], [], [], 0, false, (new Date()), "hi");
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();
@@ -909,7 +942,7 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.duplicatePlaylist = async function() {
-        const response = await api.createPlaylist("copy of " + store.currentList.name, store.currentList.songs, auth.user.email, [], [], [], 0, false, (new Date()), "hi");
+        const response = await api.createPlaylist("copy of " + store.currentList.name, store.currentList.songs, auth.user.userName, [], [], [], 0, false, (new Date()), "hi");
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();

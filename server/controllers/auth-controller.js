@@ -75,7 +75,8 @@ loginUser = async (req, res) => {
             user: {
                 firstName: existingUser.firstName,
                 lastName: existingUser.lastName,  
-                email: existingUser.email              
+                email: existingUser.email,
+                userName: existingUser.userName,             
             }
         })
 
@@ -127,7 +128,7 @@ registerUser = async (req, res) => {
                 .status(400)
                 .json({
                     success: false,
-                    errorMessage: "An account with this email address already exists."
+                    errorMessage: "An account with this email address or username already exists."
                 })
         }
 

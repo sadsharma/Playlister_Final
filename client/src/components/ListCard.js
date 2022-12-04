@@ -249,6 +249,13 @@ function ListCard(props) {
     if(store.currentList !== null && store.currentList._id === idNamePair._id && store.currentList.published === true)
     {
         color = '#6faeee';
+        if(store.currentViewList !== null)
+        {
+            if(idNamePair._id === store.currentViewList._id)
+            {
+                color = '#ffc39e';
+            }
+        }
         cardElement = 
         <ThemeProvider theme={theme}>
         <Box style={{background:color, borderRadius:'10px'}}>
@@ -298,7 +305,7 @@ function ListCard(props) {
             <Box sx={{ p: 1, transform: "scale(.8)", }}>
                 </Box>
             <Box sx={{ p: 1, transform: "scale(.8)", }}>
-            <IconButton disabled={store.guestAccountCheck} onClick={(event) => {
+            <IconButton disabled={store.guestAccountCheck || (auth.user.email !== idNamePair.ownerEmail)} onClick={(event) => {
                     handleDeleteList(event, idNamePair._id)
                 }} aria-label='delete'>
                 <DeleteIcon style={{fontSize:'24pt'}}  />
