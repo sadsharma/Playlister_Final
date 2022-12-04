@@ -60,7 +60,10 @@ const HomeScreen = () => {
       };
 
     useEffect(() => {
+      if(!store.guestAccountCheck)
+      {
         store.loadIdNamePairs();
+      }
     }, []);
 
     let listCard = "";

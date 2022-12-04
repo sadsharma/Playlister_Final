@@ -36,6 +36,7 @@ export const GlobalStoreActionType = {
     PLAYLIST_SEARCH: "PLAYLIST_SEARCH",
     USER_SEARCH: "USER_SEARCH",
     SORT_BY: "SORT_BY",
+    GUEST_ACCOUNT: "GUEST_ACCOUNT"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -69,6 +70,7 @@ function GlobalStoreContextProvider(props) {
         currentView: "HOME-SCREEN",
         currentSearchQuery: "",
         sortBy: "",
+        guestAccountCheck: false,
     });
     const history = useHistory();
 
@@ -82,7 +84,9 @@ function GlobalStoreContextProvider(props) {
     // HANDLE EVERY TYPE OF STATE CHANGE
     const storeReducer = (action) => {
         const { type, payload } = action;
-        console.log(type + " " + payload)
+        console.log(store)
+        console.log(type)
+        console.log(payload)
         switch (type) {
             // LIST UPDATE OF ITS NAME
             case GlobalStoreActionType.CHANGE_LIST_NAME: {
@@ -101,6 +105,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: store.currentView,
                     currentSearchQuery: store.currentSearchQuery,
                     sortBy: store.sortBy,
+                    guestAccountCheck : store.guestAccountCheck,
 
                 });
             }
@@ -121,6 +126,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: store.currentView,
                     currentSearchQuery: store.currentSearchQuery,
                     sortBy: store.sortBy,
+                    guestAccountCheck : store.guestAccountCheck,
                 })
             }
             // CREATE A NEW LIST
@@ -140,6 +146,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: store.currentView,
                     currentSearchQuery: store.currentSearchQuery,
                     sortBy: store.sortBy,
+                    guestAccountCheck : store.guestAccountCheck,
                 })
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -159,6 +166,26 @@ function GlobalStoreContextProvider(props) {
                     currentView: "HOME-SCREEN",
                     currentSearchQuery: store.currentSearchQuery,
                     sortBy: store.sortBy,
+                    guestAccountCheck : store.guestAccountCheck,
+                });
+            }
+            case GlobalStoreActionType.GUEST_ACCOUNT: {
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: [],
+                    currentList: [],
+                    currentViewList: [],
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    player: store.player,
+                    currentView: "HOME-SCREEN",
+                    currentSearchQuery: store.currentSearchQuery,
+                    sortBy: store.sortBy,
+                    guestAccountCheck : true,
                 });
             }
 
@@ -179,6 +206,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: store.currentView,
                     currentSearchQuery: store.currentSearchQuery,
                     sortBy: store.sortBy,
+                    guestAccountCheck : store.guestAccountCheck,
                 });
             }
             // UPDATE A LIST
@@ -196,7 +224,8 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     player: store.player,
                     currentView: store.currentView,
-                    currentSearchQuery: store.currentSearchQuery
+                    currentSearchQuery: store.currentSearchQuery,
+                    guestAccountCheck : store.guestAccountCheck,
                 });
             }
             case GlobalStoreActionType.SET_CURRENT_VIEW_LIST: {
@@ -215,6 +244,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: store.currentView,
                     currentSearchQuery: store.currentSearchQuery,
                     sortBy: store.sortBy,
+                    guestAccountCheck : store.guestAccountCheck,
                 });
             }
             case GlobalStoreActionType.SORT_BY: {
@@ -233,6 +263,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: store.currentView,
                     currentSearchQuery: store.currentSearchQuery,
                     sortBy: payload.name,
+                    guestAccountCheck : store.guestAccountCheck,
                 });
             }
 
@@ -252,6 +283,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: "SEARCH-BY-PLAYLIST-SCREEN",
                     currentSearchQuery: payload.text,
                     sortBy: store.sortBy,
+                    guestAccountCheck : store.guestAccountCheck,
                 });
             }
 
@@ -271,6 +303,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: "SEARCH-BY-USER-SCREEN",
                     currentSearchQuery: payload.text,
                     sortBy: store.sortBy,
+                    guestAccountCheck : store.guestAccountCheck,
                 });
             }
 
@@ -291,6 +324,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: store.currentView,
                     currentSearchQuery: store.currentSearchQuery,
                     sortBy: store.sortBy,
+                    guestAccountCheck : false,
                 });
             }
             case GlobalStoreActionType.SET_CURRENT_LIKE_LIST: {
@@ -310,6 +344,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: store.currentView,
                     currentSearchQuery: store.currentSearchQuery,
                     sortBy: store.sortBy,
+                    guestAccountCheck : false,
                 });
             }
 
@@ -329,6 +364,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: store.currentView,
                     currentSearchQuery: store.currentSearchQuery,
                     sortBy: store.sortBy,
+                    guestAccountCheck : false,
                 });
             }
             // START EDITING A LIST NAME
@@ -348,6 +384,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: store.currentView,
                     currentSearchQuery: store.currentSearchQuery,
                     sortBy: store.sortBy,
+                    guestAccountCheck : false,
                 });
             }
             // 
@@ -367,6 +404,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: store.currentView,
                     currentSearchQuery: store.currentSearchQuery,
                     sortBy: store.sortBy,
+                    guestAccountCheck : false,
                 });
             }
             case GlobalStoreActionType.REMOVE_SONG: {
@@ -385,6 +423,7 @@ function GlobalStoreContextProvider(props) {
                     currentView: store.currentView,
                     currentSearchQuery: store.currentSearchQuery,
                     sortBy: store.sortBy,
+                    guestAccountCheck : false,
                 });
             }
             case GlobalStoreActionType.CANNOT_LOGIN: {
@@ -395,6 +434,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     player: store.player,
+                    guestAccountCheck : false,
                 });
             }
             case GlobalStoreActionType.CANNOT_LOGIN: {
@@ -410,6 +450,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     player: store.player,
+                    guestAccountCheck : false,
                 });
             }
             case GlobalStoreActionType.HIDE_MODALS: {
@@ -426,6 +467,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     player: store.player,
                     currentView: store.currentView,
+                    guestAccountCheck : false,
                 });
             }
             default:
@@ -538,7 +580,7 @@ function GlobalStoreContextProvider(props) {
             }
         }
 
-        if(store.currentView === "HOME-SCREEN")
+        if(!store.guestAccountCheck && store.currentView === "HOME-SCREEN")
         {
             asyncLoadIdNamePairs();
         }
@@ -1007,6 +1049,25 @@ function GlobalStoreContextProvider(props) {
         asyncLoadIdNamePairs(text);
     };
 
+    store.filterSongsHomeScreen = function(text) {
+        store.idNamePairs = store.idNamePairs.filter(function(e) {return e.name.toLowerCase().includes(text.toLowerCase());});
+        let current = null;
+                let currentList = null;
+                if(store.currentViewList !== undefined || store.currentViewList !== null)
+                {
+                    current = store.currentViewList;
+                }
+                if(store.currentList !== undefined || store.currentList !== null)
+                {
+                    currentList = store.currentList;
+                }
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: {array: store.idNamePairs, listToView : current, currentList: currentList}
+                });
+            
+    }
+
     store.sortByName = function()
     {
         store.sortBy = "PLAYLIST-NAME";
@@ -1087,7 +1148,7 @@ function GlobalStoreContextProvider(props) {
         if(store.sortBy === "LISTENS")
         {
             array.sort((s1, s2) => {
-                return s1.listens - s2.listens;
+                return s2.listens - s1.listens;
             });
             return array;
         }
@@ -1113,6 +1174,12 @@ function GlobalStoreContextProvider(props) {
             return array;
         }
 
+    }
+    store.guestAccount = function(){
+        storeReducer({
+            type: GlobalStoreActionType.GUEST_ACCOUNT,
+            payload:[]
+        });
     }
 
     return (

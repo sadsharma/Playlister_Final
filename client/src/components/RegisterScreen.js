@@ -23,6 +23,7 @@ export default function RegisterScreen() {
             formData.get('firstName'),
             formData.get('lastName'),
             formData.get('email'),
+            formData.get('username'),
             formData.get('password'),
             formData.get('passwordVerify')
         );

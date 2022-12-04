@@ -156,13 +156,16 @@ function ListCard(props) {
         date = idNamePair.publishedDate.substring(0,10);
         likes = idNamePair.likes.length;
         dislikes = idNamePair.dislikes.length;
-        if(idNamePair.likes.includes(auth.user.email))
+        if(!store.guestAccountCheck)
         {
-            colorOfLikeIcon = "#5b7551";
-        }
-        if(idNamePair.dislikes.includes(auth.user.email))
-        {
-            colorOfDislikeIcon = "#944547";
+            if(idNamePair.likes.includes(auth.user.email))
+            {
+                colorOfLikeIcon = "#5b7551";
+            }
+            if(idNamePair.dislikes.includes(auth.user.email))
+            {
+                colorOfDislikeIcon = "#944547";
+            }
         }
     }
 

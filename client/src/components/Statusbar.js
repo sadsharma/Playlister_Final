@@ -20,7 +20,7 @@ function Statusbar() {
     }
 
     let text ="";
-    if (auth.loggedIn)
+    if (auth.loggedIn && !auth.onlyRegistered)
     {
         return (
             <div id="playlister-statusbar">

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat&family=Dancing+Script&family=Fredericka+the+Great&family=Kaushan+Script&family=Rubik+Glitch&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat&family=Dancing+Script&family=Fredericka+the+Great&family=Kaushan+Script&family=Kenia&family=Rubik+Glitch&display=swap');
 :root {
   /* 
         FIRST WE'LL DEFINE OUR SWATCHES, i.e. THE COMPLEMENTARY
@@ -70,12 +70,12 @@
 }
 
 #playlister {
-  font-family: 'kushan script', cursive;
+  font-family: 'Kenia', cursive;
   font-style: bold;
   font-weight: 800;
   color: #ad0d0d;
   font-size: 4ch;
-  padding-top: 1.3ch;
+  padding-top: 2.5ch;
   
 }
 
@@ -93,8 +93,13 @@
 #playlister-purpose-statement {
   font-family: 'Caveat', cursive;
   padding-top: 1ch;
-  color: rgb(255, 255, 255);
+  color: rgb(162, 91, 91);
   font-size: 30px;
+}
+#my-name{
+  font-family: 'Caveat', cursive;
+  color: rgb(39, 37, 37);
+  font-size: 24px;
 }
 
 #createAccount {

@@ -88,6 +88,10 @@ export default function AppBanner() {
             {
                 store.retrieveAllPlaylistsByUser(e.target.value);
             }
+            if(store.currentView === "HOME-SCREEN")
+            {
+                store.filterSongsHomeScreen(e.target.value);
+            }
         }
     }
 
@@ -155,6 +159,10 @@ export default function AppBanner() {
 
     let editToolbar = "";
     let menu = loggedOutMenu;
+    if(store.guestAccountCheck)
+    {
+        menu = null;
+    }
     if (auth.loggedIn) {
         menu = loggedInMenu;
         if (store.currentList) {
@@ -165,6 +173,10 @@ export default function AppBanner() {
     function getAccountMenu(loggedIn) {
         let userInitials = auth.getUserInitials();
         console.log("userInitials: " + userInitials);
+        if(store.guestAccountCheck)
+        {
+            return <a href='/'><button>SPLASH SCREEN</button></a>
+        }
         if (loggedIn) 
             return <div>{userInitials}</div>;
         else
@@ -212,7 +224,7 @@ export default function AppBanner() {
       }));
 
     let colorOfHomeButton = 'black';
-    if(store.currentView === "HOME-SCREEN")
+    if(store.currentView === "HOME-SCREEN" && !store.guestAccountCheck)
     {
         colorOfHomeButton = 'red';
     }
@@ -228,7 +240,7 @@ export default function AppBanner() {
         colorOfSearchByUserButton = 'red';
     }
     console.log(colorOfSearchByPlaylistButton);
-    if(auth.loggedIn)
+    if((auth.loggedIn  || store.guestAccountCheck) && !auth.onlyRegistered)
     {
         return (
             <Box sx={{ flexGrow: 1 }}>
@@ -267,17 +279,16 @@ export default function AppBanner() {
                 }
                 <AppBar position="static" style={{ background: '#a7b8e3'}}>
                     <Toolbar id="Secondary-toolbar">
-                    <Link style={{ textDecoration: 'none', color: 'black' }} to='/'>
+                    <IconButton style={{ textDecoration: 'none', color: 'black' }} disabled={store.guestAccountCheck} onClick={handleHomeButton}>
                         <BungalowIcon
                             size="large"
                             edge="start"
                             color={colorOfHomeButton}
                             aria-label="open drawer"
                             sx={{ mr: 2, color: colorOfHomeButton}}
-                            onClick={handleHomeButton}
                         >
                         </BungalowIcon> 
-                    </Link>
+                    </IconButton>
                     <Box sx={{ flexGrow: .02}}></Box>
                     <Groups2Icon
                         style={{ textDecoration: 'none'}}

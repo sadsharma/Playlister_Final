@@ -29,6 +29,7 @@ function AuthContextProvider(props) {
         user: null,
         loggedIn: false, 
         cannotLogIn:false,
+        onlyRegistered: false,
     });
     const history = useHistory();
 
@@ -47,6 +48,7 @@ function AuthContextProvider(props) {
                     loggedIn: payload.loggedIn,
                     cannotLogIn:false,
                     errorMessages: "",
+                    onlyRegistered: false,
                 });
             }
             case AuthActionType.LOGIN_USER: {
@@ -56,6 +58,7 @@ function AuthContextProvider(props) {
                     loggedIn: true,
                     cannotLogIn:false,
                     errorMessages: "",
+                    onlyRegistered: false,
                 })
             }
             case AuthActionType.LOGOUT_USER: {
@@ -65,15 +68,17 @@ function AuthContextProvider(props) {
                     loggedIn: false,
                     cannotLogIn:false,
                     errorMessages: "",
+                    onlyRegistered: false,
                 })
             }
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     currentModal : CurrentModal.NONE,
-                    user: payload.user,
+                    user: null,
                     loggedIn: true,
                     cannotLogIn:false,
                     errorMessages: "",
+                    onlyRegistered: true,
                 })
             }
             case AuthActionType.CANNOT_LOGIN: {
@@ -83,6 +88,7 @@ function AuthContextProvider(props) {
                     loggedIn: false,
                     cannotLogIn:true,
                     errorMessages: payload,
+                    onlyRegistered: false,
                 })
             }
             case AuthActionType.HIDE_MODALS: {
@@ -124,9 +130,9 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
+    auth.registerUser = async function(firstName, lastName, email, username, password, passwordVerify) {
         try{
-            const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);      
+            const response = await api.registerUser(firstName, lastName, email, username, password, passwordVerify);      
             if (response.status === 200) {
                 authReducer({
                     type: AuthActionType.REGISTER_USER,
