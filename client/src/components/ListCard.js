@@ -169,6 +169,14 @@ function ListCard(props) {
         }
     }
 
+    if(store.currentViewList !== null)
+    {
+        if(idNamePair._id === store.currentViewList._id)
+        {
+            color = '#ffc39e';
+        }
+    }
+
     let publishedCard =
         <ThemeProvider theme={theme}>
         <ListItem
@@ -205,6 +213,7 @@ function ListCard(props) {
                 <Box id="published" sx={{ p: 1, fontSize: '10pt',}}>Listens: {idNamePair.listens}</Box>
         </ListItem>
         </ThemeProvider>
+
 
     let unpublishedCard =
         <ThemeProvider theme={theme}>
