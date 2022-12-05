@@ -324,6 +324,7 @@ export default function AppBanner() {
                         />
                     </Search>
                     <Box sx={{ flexGrow: .50 }}></Box>
+                    
                     <SortIcon
                         id="sort"
                         style={{ textDecoration: 'none', color: 'black' }}

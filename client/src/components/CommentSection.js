@@ -27,11 +27,12 @@ export default function CommentSection() {
         store.submitComment(newComment, auth.user.userName);
     }
 
-    if(store.currentViewList === null)
+    if(store.currentViewList === null || store.currentViewList.comments === undefined)
     {
-        return null;
+        return(
+            <div>No list selected!</div>
+        );
     }
-
     return (
         <div id="comment-section">
             <div id="comment-display">

@@ -135,20 +135,20 @@ export default function YouTubePlayer() {
         loadAndPlayCurrentSong(store.player.target);
         
     }
-    
-    if(playlist.length === 1)
-    {
-        return (
-            <div>
-                This playlist has no videos!
-            </div>
-        )
-    }
-    if(playlist[1] === "0")
+
+    if(store.currentViewList === null || store.currentViewList === undefined || store.currentViewList.songs === undefined )
     {
         return (
             <div>
                 No list selected!
+            </div>
+        )
+    }
+    else if( store.currentViewList.songs.length === 0)
+    {
+        return (
+            <div>
+                This playlist has no videos!
             </div>
         )
     }

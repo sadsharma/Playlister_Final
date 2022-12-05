@@ -305,7 +305,7 @@ function ListCard(props) {
             <Box sx={{ p: 1, transform: "scale(.8)", }}>
                 </Box>
             <Box sx={{ p: 1, transform: "scale(.8)", }}>
-            <IconButton disabled={store.guestAccountCheck || (auth.user.email !== idNamePair.ownerEmail)} onClick={(event) => {
+            <IconButton disabled={store.guestAccountCheck || (auth.user.userName !== idNamePair.ownerEmail)} onClick={(event) => {
                     handleDeleteList(event, idNamePair._id)
                 }} aria-label='delete'>
                 <DeleteIcon style={{fontSize:'24pt'}}  />
