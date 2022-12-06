@@ -231,9 +231,9 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.SET_CURRENT_VIEW_LIST: {
                 return setStore({
                     currentModal : CurrentModal.NONE,
-                    idNamePairs: store.idNamePairs,
+                    idNamePairs: payload.idNamePairs,
                     currentList: store.currentList,
-                    currentViewList: payload,
+                    currentViewList: payload.playlist,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -749,9 +749,8 @@ function GlobalStoreContextProvider(props) {
                 if (response.data.success) {
                     storeReducer({
                         type: GlobalStoreActionType.SET_CURRENT_VIEW_LIST,
-                        payload: playlist
+                        payload: {playlist: playlist, idNamePairs: store.idNamePairs}
                     });
-                    
                 }
             }
 
@@ -943,7 +942,26 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.duplicatePlaylist = async function() {
-        const response = await api.createPlaylist("copy of " + store.currentList.name, store.currentList.songs, auth.user.userName, [], [], [], 0, false, (new Date()), "hi");
+        let counter = 1;
+        let newListName = "copy of " + store.currentList.name;
+        let array = store.idNamePairs.filter(function(e1) { return e1.name.toLowerCase() === newListName.toLowerCase();});
+        console.log(array.length);
+        if(array.length > 0)
+        {
+            let uniqueName = false;
+            while (uniqueName !== true)
+            {
+                let name = newListName + " " + counter;
+                let array = store.idNamePairs.filter(function(e1) { return e1.name.toLowerCase() === name.toLowerCase();});
+                if(array.length === 0)
+                {
+                    uniqueName = true;
+                    newListName = name;
+                }
+                counter++;
+            }       
+        }
+        const response = await api.createPlaylist(newListName, store.currentList.songs, auth.user.userName, [], [], [], 0, false, (new Date()), "hi");
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();
