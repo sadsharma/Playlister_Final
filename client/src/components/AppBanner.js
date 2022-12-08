@@ -76,6 +76,12 @@ export default function AppBanner() {
     const handleSortByDislikes = () => {
         store.sortByDislikes();
     }
+    const handleSortByCreatedDate = () => {
+        store.sortByCreatedDate();
+    }
+    const handleSortByEditDate = () => {
+        store.sortByEditDate();
+    }
 
     const handleOnKeyDown = (e) => {
         if(e.key === "Enter")
@@ -134,7 +140,7 @@ export default function AppBanner() {
         >
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>  )      
-    const sortMenu = (
+    const sortMenuOther = (
         <Menu
             anchorEl={anchorEl}
             anchorOrigin={{
@@ -155,9 +161,31 @@ export default function AppBanner() {
             <MenuItem onClick={handleSortByLikes}>Sort by Likes</MenuItem>
             <MenuItem onClick={handleSortByDislikes}>Sort by Dislikes</MenuItem>
             <MenuItem onClick={handleSortByListens}>Sort by Listens</MenuItem>
+        </Menu>   ) 
+
+    const sortMenuHome = (
+        <Menu
+            anchorEl={anchorEl}
+            anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            id={menuId}
+            keepMounted
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            open={anchorEl !== null && anchorEl.id === "sort"}
+            onClose={handleMenuClose}
+        >
+            <MenuItem onClick={handleSortByName}>Sort by Name</MenuItem>
+            <MenuItem onClick={handleSortByEditDate}>Sort by Creation Date</MenuItem>
+            <MenuItem onClick={handleSortByCreatedDate}>Sort by Edit Date</MenuItem>\
         </Menu>   )    
 
     let editToolbar = "";
+    let sortMenu = sortMenuOther;
     let menu = loggedOutMenu;
     if(store.guestAccountCheck)
     {
@@ -168,6 +196,9 @@ export default function AppBanner() {
         if (store.currentList) {
             editToolbar = <EditToolbar />;
         }
+    }
+    if (store.currentView === "HOME-SCREEN") {
+       sortMenu = sortMenuHome;
     }
     
     function getAccountMenu(loggedIn) {

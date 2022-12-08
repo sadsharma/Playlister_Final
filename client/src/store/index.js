@@ -514,6 +514,7 @@ function GlobalStoreContextProvider(props) {
                             response = await api.getPlaylistPairs();
                             if (response.data.success) {
                                 let pairsArray = response.data.idNamePairs;
+                                pairsArray = store.sortingFunction(pairsArray);
                                 storeReducer({
                                     type: GlobalStoreActionType.CHANGE_LIST_NAME,
                                     payload: {
@@ -603,6 +604,7 @@ function GlobalStoreContextProvider(props) {
                 {
                     currentList = store.currentList;
                 }
+                pairsArray = store.sortingFunction(pairsArray);
                 storeReducer({
                     type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
                     payload: {array: pairsArray, listToView : current, currentList: currentList}
@@ -873,7 +875,7 @@ function GlobalStoreContextProvider(props) {
             if (response.data.success) {
                 storeReducer({
                     type: GlobalStoreActionType.SET_CURRENT_VIEW_LIST,
-                    payload: store.currentViewList
+                    payload: {idNamePairs: store.idNamePairs, playlist: store.currentViewList}
                 });
             }
         }
@@ -1177,6 +1179,27 @@ function GlobalStoreContextProvider(props) {
 
     }
 
+    store.sortByCreatedDate = function()
+    {
+        store.sortBy = "CREATED-DATE";
+        let pairs = store.sortingFunction(store.idNamePairs)
+        storeReducer({
+            type: GlobalStoreActionType.SORT_BY,
+            payload: { array: pairs, name: store.sortBy}
+        });
+
+    }
+    store.sortByEditDate = function()
+    {
+        store.sortBy = "EDIT-DATE";
+        let pairs = store.sortingFunction(store.idNamePairs)
+        storeReducer({
+            type: GlobalStoreActionType.SORT_BY,
+            payload: { array: pairs, name: store.sortBy}
+        });
+
+    }
+
     store.sortingFunction = function(array)
     {
         if(store.sortBy === "")
@@ -1228,6 +1251,23 @@ function GlobalStoreContextProvider(props) {
             });
             return array;
         }
+        if(store.sortBy === "CREATED-DATE")
+        {
+            array.sort((x, y) => {
+                return y.createdAt - x.createdAt;
+            });
+            return array;
+        }
+        if(store.sortBy === "EDIT-DATE")
+        {
+            array.sort((x, y) => {
+                console.log(y.updateAt + " " + x.updateAt);
+                console.log(y.publishedDate + " " + x.publishedDate);
+                return y.updatedAt - x.updatedAt;
+            });
+            return array;
+        }
+        return array;
 
     }
     store.guestAccount = function(){
